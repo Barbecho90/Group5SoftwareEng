@@ -1,6 +1,6 @@
 # Multiplayer BlackJack
 
-Multiplayer BlackJack is an online game that is played concurrently with other players. The game will closely model its real life counterpart, while making slight modifications to make it easier to play on the computer.
+This project includes the interface design, architectural components, and detailed class structures required to implement Blackjack game.  This document serves as a comprehensive guide for the team, facilitating a clear understanding of the game’s requirements and design considerations.
 
 ## Our Team:
 
