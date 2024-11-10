@@ -4,21 +4,19 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import enums.ROLE;
-
 public class AccountManager {
 	private Map<String, Account> accounts = new HashMap<>();
 
 	private static final String FILE_PATH = "user_credentials.txt"; // File to store accounts
-	private static AccountManager instance = null;
+	private static AccountManagerTest instance = null;
 
 	private AccountManager() {
 		this.accounts = new HashMap<String, Account>();
 	}
 
-	public static AccountManager getInstance() {
+	public static AccountManagerTest getInstance() {
 		if (instance == null) {
-			return new AccountManager();
+			return new AccountManagerTest();
 		}
 
 		return instance;
