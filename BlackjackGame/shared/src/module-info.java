@@ -5,4 +5,5 @@
  * 
  */
 module shared {
+	requires junit;
 }
