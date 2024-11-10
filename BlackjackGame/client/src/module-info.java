@@ -5,4 +5,5 @@
  * 
  */
 module client {
+	requires shared;
 }
