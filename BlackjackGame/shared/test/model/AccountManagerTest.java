@@ -1,4 +1,4 @@
-package test;
+package model;
 
 public class AccountManagerTest {
 
