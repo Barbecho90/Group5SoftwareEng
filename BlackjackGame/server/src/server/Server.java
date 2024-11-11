@@ -53,13 +53,13 @@ public class Server {
 					ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream())) {
 
 				while (true) {
-					// Receive login details in a message
-					Message message = (Message) inputStream.readObject();
-					// Extract the account from the message
-					Account account = message.getAccount();
-					// Validate the account credentials (for example, checking username and password)
-					boolean loginSuccess = AccountManager.getInstance().login(account.getUsername(),
-							account.getPassword());
+					
+					//Message to receive for login
+					Message message = (Message) inputStream.readObject();  
+					Account account = message.getAccount();  	// Extract the account from the message
+					boolean loginSuccess = AccountManager.getInstance().login(account.getUsername(), 
+							account.getPassword());    // Validate the account credentials (for example, checking username and password)
+					
 					// Respond to the client
 					message.setStatus(loginSuccess ? "success" : "failure");
 					outputStream.writeObject(message);
