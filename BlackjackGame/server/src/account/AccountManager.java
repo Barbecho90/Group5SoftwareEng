@@ -36,7 +36,7 @@ public class AccountManager {
 					String password = parts[1];
 					ROLE role;
 					 try {
-		                    role = ROLE.valueOf(parts[2].toUpperCase()); // Convert to uppercase to match enum constants
+		                    role = ROLE.valueOf(parts[2].toUpperCase()); // Convert to Uppercase to match enum constants
 		                } catch (IllegalArgumentException e) {
 		                    System.err.println("Invalid role for user " + username + ": " + parts[2]);
 		                    continue; // Skip this account if the role is invalid
@@ -50,32 +50,10 @@ public class AccountManager {
 		this.isLoaded = true;
 	}
 
-//	public boolean createAccount(String username, String password, ROLE role) {
-//		if (accounts.containsKey(username)) {
-//			return false; // Account already exists
-//		}
-//		accounts.put(username, new Account(username, password, role));
-//		saveAccounts(); // Save accounts to file
-//		return true; // Account created successfully
-//	}
 
 	public boolean login(String username, String password) {
 		Account account = accounts.get(username);
 		return account != null && account.getPassword().equals(password); // Check credentials
 	}
-
-//	private void saveAccounts() {
-//		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-//			for (Account account : accounts.values()) {
-//				writer.write(account.getUsername() + "," + account.getPassword() + "," + account.getRole());
-//				writer.newLine();
-//			}
-//		} catch (IOException e) {
-//			System.err.println("Error saving accounts: " + e.getMessage());
-//		}
-//	}
-//	
-//	public boolean accountsAreLoaded() {
-//		return this.isLoaded;
-//	}
 }
+

@@ -6,8 +6,9 @@ public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
-	private User user;
+	private User user;  
 	private ROLE role;
+	private double balance;
 
 	public Account(String username, String password, ROLE role) {
 		if (username == null || username.isEmpty()) {
@@ -21,6 +22,7 @@ public class Account implements Serializable {
 		this.username = username;
 		this.password = password;
 		this.role = role;
+		this.balance = 0.0;
 
 	}
 
@@ -42,8 +44,31 @@ public class Account implements Serializable {
 		return password;
 	}
 
+	public double getBalance() {
+		return balance;
+	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	// Methods
 
+	public void deposit(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Deposits must be positive");
+		}
+		balance += amount;
+	}
+
+	public void withdraw(double amount) {
+		
+		if (amount <= 0 ) {
+			throw new IllegalArgumentException("Withdrawal must be positive");
+		}
+		if  (amount > balance) {
+			throw new IllegalArgumentException("Insuficient balance");
+		}
+		balance -= amount;
+	}
 }
