@@ -126,7 +126,7 @@ public class Server {
 	}
 	public static void shutdownServer() {
 	    isRunning = false;  // Stop accepting new connections
-	    pool.shutdown();  // Gracefully shut down the thread pool
+	    pool.shutdown();  // shut down the thread pool
 	    System.out.println("Server shut down.");
 	} 
 }
