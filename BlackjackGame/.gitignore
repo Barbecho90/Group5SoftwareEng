@@ -10,7 +10,8 @@ local.properties
 .settings/
 .loadpath
 .recommenders
-**/.classpath
+client/.classpath
+server/.classpath
 
 # External tool builders
 .externalToolBuilders/
