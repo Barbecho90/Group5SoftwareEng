@@ -1,3 +1,4 @@
+package model;
 public class Shoe{
 	
 	private Deck[] fourDecks = new Deck[4];

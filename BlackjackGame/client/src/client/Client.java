@@ -9,19 +9,19 @@ import model.Message;
 
 public class Client {
 
-	private static final String SERVER_ADDRESS = "192.168.0.71"; // Carolina's IP Desktop
-	private static final int SERVER_PORT = 12345; // port used in the server
+	//private static final String SERVER_ADDRESS = "Here is your IP"; // Carolina's IP Desktop - testing
+	//private static final int SERVER_PORT = 12345; 
 
 	public static void main(String[] args) throws ClassNotFoundException {
 
-//		Scanner sc = new Scanner(System.in);
-//		System.out.print("Enter the port number to connect: ");
-//		int port = sc.nextInt();
-//		System.out.print("Enter the host address to connect:  ");
-//		String host = sc.next();
-//
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Enter the port number to connect: ");
+		int port = sc.nextInt();
+		System.out.print("Enter the host address to connect:  ");
+		String host = sc.next();
 
-		try (Socket socket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+
+		try (Socket socket = new Socket(host, port);
 
 				ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
@@ -67,7 +67,7 @@ public class Client {
 							break;
 						}
 					}
-				}
+				} 
 			} else {
 				System.out.println("Login failed.");
 			}
@@ -79,5 +79,6 @@ public class Client {
 
 			e.printStackTrace();
 		}
+	sc.close();
 	}
 }
