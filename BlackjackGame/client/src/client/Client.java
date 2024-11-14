@@ -2,6 +2,8 @@ package client;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import model.Account;
@@ -9,17 +11,21 @@ import model.Message;
 
 public class Client {
 
-	//private static final String SERVER_ADDRESS = "Here is your IP"; // Carolina's IP Desktop - testing
-	//private static final int SERVER_PORT = 12345; 
+	private static final String SERVER_ADDRESS = "192.168.0.71"; // Carolina's
+
+	private static final int SERVER_PORT = 12345;
 
 	public static void main(String[] args) throws ClassNotFoundException {
 
+		List<Message> messages = new ArrayList<>();
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter the port number to connect: ");
-		int port = sc.nextInt();
+		// int port = sc.nextInt();
+		int port = SERVER_PORT;
 		System.out.print("Enter the host address to connect:  ");
-		String host = sc.next();
-
+		// String host = sc.next();
+		String host = SERVER_ADDRESS;
 
 		try (Socket socket = new Socket(host, port);
 
@@ -27,18 +33,17 @@ public class Client {
 				ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
 				Scanner scanner = new Scanner(System.in)) {
 
-			System.out.println("Connected to the Server ");
+			System.out.println("Connected to the Server : " + host);
 			System.out.print("Username: ");
-			//String username = scanner.nextLine();
+			// String username = scanner.nextLine();
 			String username = ("user1");
 			System.out.print("Password: ");
-			//String password = scanner.nextLine();
+			// String password = scanner.nextLine();
 			String password = ("user1");
 
 			Account account = new Account(username, password, null);
-
-			// Create a Message login
 			Message loginMessage = new Message(account);
+			messages.add(loginMessage);
 			outputStream.writeObject(loginMessage);
 			outputStream.flush();
 
@@ -54,9 +59,11 @@ public class Client {
 
 					// Client enter logout and we send a message to Server
 					if ("logout".equalsIgnoreCase(userInputs)) {
+						//create and add a logout message
+						Message logoutMessage = new Message("logout");
+						messages.add(logoutMessage);
 
 						// Sending logout message
-						Message logoutMessage = new Message("logout");
 						outputStream.writeObject(logoutMessage);
 						outputStream.flush();
 
@@ -67,7 +74,7 @@ public class Client {
 							break;
 						}
 					}
-				} 
+				}
 			} else {
 				System.out.println("Login failed.");
 			}
@@ -79,6 +86,6 @@ public class Client {
 
 			e.printStackTrace();
 		}
-	sc.close();
+
 	}
 }
