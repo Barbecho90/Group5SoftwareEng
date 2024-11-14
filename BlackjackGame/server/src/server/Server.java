@@ -37,8 +37,8 @@ public class Server {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			pool.shutdown(); // Gracefully shut down the thread pool
-			System.out.println("Server is shutting down.");
+			pool.shutdown(); //  shut down the thread pool
+			System.out.println("Thread Pool is shutting down.");
 		}
 	}
 
@@ -87,7 +87,7 @@ public class Server {
 						
 						// Reset login status and end the connection
 						
-						System.out.println("Client requested logout. Ending connection...");
+						System.out.println("Client: " + clientSocket.getInetAddress() + "  requested logout. Ending connection...");
 						isLoggedIn=false;
 		                return; // End the connection and stop handling the client
 		            
