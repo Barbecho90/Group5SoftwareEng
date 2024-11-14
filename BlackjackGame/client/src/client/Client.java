@@ -71,6 +71,11 @@ public class Client {
 						Message logoutResponse = (Message) inputStream.readObject();
 						if ("logout".equals(logoutResponse.getStatus())) {
 							System.out.println("Logout successful.");
+							 for (Message message : messages) {
+							        // Print the details of each message, for example, its type and status
+							     int i =0;   
+								 System.out.println("Message Type: " + message.getType() + (i++));
+							    }
 							break;
 						}
 					}
