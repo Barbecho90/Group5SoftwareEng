@@ -29,7 +29,7 @@ public class Server {
 			// wait for client connections
 			while (true) {
 				Socket clientSocket = serverSocket.accept();
-				System.out.println("Client connected.");
+				System.out.println("Client connected." + clientSocket.getInetAddress());
 
 				// handle client connection in a new thread
 				pool.execute(new ClientHandler(clientSocket));
@@ -97,9 +97,7 @@ public class Server {
 			} catch (IOException | ClassNotFoundException e) {
 				System.out.println("CLient disconnected unexpectedly");
 				e.printStackTrace();
-			} finally {
-				shutdownServer();
-			}
+			} 
 			
 		}
 	}
