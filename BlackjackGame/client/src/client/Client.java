@@ -18,7 +18,7 @@ public class Client {
 	public static void main(String[] args) throws ClassNotFoundException {
 
 		List<Message> messages = new ArrayList<>();
-		
+
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Enter the port number to connect: ");
 		// int port = sc.nextInt();
@@ -59,7 +59,7 @@ public class Client {
 
 					// Client enter logout and we send a message to Server
 					if ("logout".equalsIgnoreCase(userInputs)) {
-						//create and add a logout message
+						// create and add a logout message
 						Message logoutMessage = new Message("logout");
 						messages.add(logoutMessage);
 
@@ -71,11 +71,7 @@ public class Client {
 						Message logoutResponse = (Message) inputStream.readObject();
 						if ("logout".equals(logoutResponse.getStatus())) {
 							System.out.println("Logout successful.");
-							 for (Message message : messages) {
-							        // Print the details of each message, for example, its type and status
-							     int i =0;   
-								 System.out.println("Message Type: " + message.getType() + (i++));
-							    }
+
 							break;
 						}
 					}
@@ -91,6 +87,7 @@ public class Client {
 
 			e.printStackTrace();
 		}
+		sc.close();
 
 	}
 }
