@@ -5,12 +5,11 @@ public class Table {
 	//Dealer class should initialize with a Table
 	static private int count = 0;
 	private int id;
-	private int minBet;
+	private int minBet = 2;
 	private int numPlayers = 0;
 	private Shoe shoe = new Shoe();
-	private Hand dealerHand;
-	private Card dealerShowCard;
-	private Card minCardBeforeShuffle;
+	private Dealer hostDealer;
+	private int minCardIndBeforeShuffle;
 	
 	public Table() {
 		
@@ -35,19 +34,19 @@ public class Table {
 		return this.minBet;
 	}
 
-	public void setMinBet(int minBet) {
+	/*public void setMinBet(int minBet) {
 		//Dealer will set the minBet once initialized
 		this.minBet = minBet;
-	}
+	}*/
 
-	public Card getMinCardBeforeShuffle() {
+	public int getMinCardBeforeShuffle() {
 		return this.minCardBeforeShuffle;
 	}
 
-	public void setMinCardBeforeShuffle(Card minCardBeforeShuffle) {
+	/*public void setMinCardBeforeShuffle(Card minCardBeforeShuffle) {
 		//not sure what this is
 		this.minCardBeforeShuffle = minCardBeforeShuffle;
-	}
+	}*/
 
 	public int getNumPlayers() {
 		return this.numPlayers;
