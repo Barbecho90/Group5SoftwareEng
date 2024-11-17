@@ -2,92 +2,153 @@ package model;
 
 import java.util.ArrayList;
 
-public class Hand{
+public class Hand {
 	private ArrayList<Card> hand;
 	private int bet;
 	private boolean isSplit = false;
 	private int handValue = 0;
-	
-	public Hand(Card card1, Card card2, int bet) {
+	private boolean busted;
+	private boolean canSplit;
+	private boolean canDoubleDown;
+
+	// First ask amount to bet, then we hand one card to all players and then the
+	// other hand
+//	public Hand(Card card1, Card card2, int bet) {
+//		hand = new ArrayList<>();
+////		hand.add(card1);
+////		hand.add(card2);
+////		updateHandValue();
+////		this.bet = bet;
+//	}
+
+	// Default Constructor
+	public Hand() {
 		hand = new ArrayList<>();
-		hand.add(card1);
-		hand.add(card2);
-		updateHandValue();
-		this.bet = bet;
+		this.bet = 0;
+		this.isSplit = false;
+		// this.handValue =0;
 	}
-	
-	public Hand(Card card1,int bet, boolean isSplit) {
-		hand = new ArrayList<>();
-		hand.add(card1);
-		updateHandValue();
-		this.bet = bet;
-		this.isSplit = true;
-	}
-	
+
+	// Method to add a card to the hand
 	public void hit(Shoe shoe) {
 		addCard(shoe.dealNextCard());
-		this.updateHandValue();
+		updateHandValue();
+		calculateActions();
 	}
-	
-	// Irrelevant since arraylist already has add function
+
+	// Adds a card to the hand
 	public void addCard(Card card) {
 		hand.add(card);
+		updateHandValue();
+
 	}
-	
+
 	// Removes a card from the current hand and creates a new hand and returns
 	// the new hand with the removed card.
-	public Hand setSplit() {
+	public ArrayList<Card> setSplit() {
 		this.isSplit = true;
-		Hand splitHand = new Hand(this.hand.get(1), this.getBet(), true);
+		ArrayList<Card> splitHand = new ArrayList<Card>();
+		splitHand.add(hand.get(1));
 		hand.remove(1);
+		updateHandValue();
 		return splitHand;
 	}
-	
+
+	public boolean canSplit() {
+		return canSplit;
+	}
+
+	public boolean canDoubleDown() {
+		return canDoubleDown;
+	}
+
+	public boolean isBusted() {
+		return busted;
+	}
+
+	public int getBet() {
+		return this.bet;
+	}
+
+	public boolean getIsSplit() {
+		return this.isSplit;
+	}
+
+	public int getTotalCards() {
+		return hand.size();
+	}
+
+	// Calculates the total value of the hand, considering Aces as high or low
+	public int getHandValue() {
+		int handValue = 0;
+		for (Card card : hand) {
+			if (card.getRank().equals(Card.CardRank.Ace)) {
+				if (handValue + Constants.ACE_HIGH > Constants.MAX_HAND_VALUE) {
+					handValue += Constants.ACE_LOW;
+
+				} else {
+					handValue += Constants.ACE_HIGH;
+				}
+			} else {
+				handValue += card.getNumericalValue();
+			}
+
+		}
+		return handValue;
+	}
+
+	// Helper Methods
+	private void calculateActions() {
+		calculateBust();
+		calculateDoubleDown();
+		calculateCanSplit();
+	}
+
+	private void calculateBust() {
+		this.busted = getHandValue() > Constants.MAX_HAND_VALUE;
+	}
+
+	private void calculateDoubleDown() {
+		if (hand.size() != 2) {
+			this.canDoubleDown = false;
+			return;
+		}
+
+		int value = getHandValue();
+
+		canDoubleDown = value == 9 || value == 10 || value == 11;
+	}
+
 	public void doubleDown(Shoe shoe) {
 		this.bet *= 2;
 		this.hit(shoe);
 	}
 
-	public int updateHandValue() {
-		handValue = 0;
-		int aces = 0;
-		for(Card card : hand) {
-			handValue += card.getValues()[0];
-			// Checks how many aces they are for later use
-			if(card.getRank() == Card.CardRank.Ace) {
-				aces ++;
-				// If it is an ace change it to 11
-				handValue + = 10;
-			}
+	private void calculateCanSplit() {
+		if (hand.size() != 2) {
+			this.canSplit = false;
+			return;
 		}
 
-		// If there are aces in the hand and the handValue is greater 
-		// than 21 then change the ace value to 1.
-		while(handValue > 21 && aces > 0) {
-			handValue -= 10;
-			aces --;
-		}
-		
-		return handValue;
+		Card cardOne = hand.get(0);
+		Card cardTwo = hand.get(1);
+
+		canSplit = cardOne.getNumericalValue() == cardTwo.getNumericalValue();
 	}
-	
-	public int getBet() {
-		return this.bet;
+
+	// Updates the total hand value
+	private void updateHandValue() {
+		this.handValue = getHandValue();
 	}
-	
-	public boolean getIsSplit() {
-		return this.isSplit;
+
+	// clear hand for new rounds
+	public void clear() {
+		hand.clear();
+		handValue = 0;
+		isSplit = false;
+		busted = false;
+		canSplit = false;
+		canDoubleDown = false;
 	}
-	
-	public int getTotalCards() {
-		return hand.size();
-	}
-	
-	public int getHandValue() {
-		return handValue;
-	}
-	
-	public ArrayList<Card> getHand(){
-		return this.hand;
-	}
+
 }
