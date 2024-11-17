@@ -1,8 +1,9 @@
-package testing;
+package model;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.Test;
+//import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import org.junit.Test;
+//import org.junit.jupiter.api.Test;
 
 import model.Card;
 import model.Card.CardRank;
