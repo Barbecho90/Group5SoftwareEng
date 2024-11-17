@@ -18,7 +18,7 @@ public class Server {
 		
 
 	public static void main(String[] args) {
-		
+		AccountManager.getInstance().loadAccounts();
 		String ipAddress = getLocalIPAddress();
 		System.out.println("Server Info: Port: " + PORT + "  IP: " + ipAddress);
 
