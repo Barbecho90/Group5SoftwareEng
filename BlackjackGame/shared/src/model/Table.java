@@ -10,6 +10,7 @@ public class Table {
 	private Shoe shoe = new Shoe();
 	private Dealer hostDealer;
 	private int minCardIndBeforeShuffle;
+	private boolean isOpen;
 	
 	public Table() {
 		
@@ -78,6 +79,10 @@ public class Table {
 	public Shoe getShoe() {
 		// TODO Auto-generated method stub
 		return this.shoe;
+	}
+	
+	public boolean isOpen() {
+		return isOpen;
 	}
 	
 	
