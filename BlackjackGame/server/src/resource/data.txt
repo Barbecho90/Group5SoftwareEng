@@ -17,7 +17,7 @@ user19,user19,PLAYER,0.0
 user18,user18,PLAYER,0.0
 user17,user17,PLAYER,0.0
 user16,user16,PLAYER,0.0
-user1,user1,PLAYER,100.0
+user1,user1,PLAYER,300.0
 user22,user22,PLAYER,0.0
 user2,user2,PLAYER,0.0
 user21,user21,PLAYER,0.0
