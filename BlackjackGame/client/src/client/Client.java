@@ -10,7 +10,6 @@ import abstractMessages.AbstractLogin;
 import abstractMessages.AbstractMessage;
 import message.DepositMessage;
 import message.LoginMessage;
-import message.WithdrawMessage;
 import model.Account;
 import model.Message;
 
@@ -67,18 +66,6 @@ public class Client {
 			response = (Object) inputStream.readObject();
 			System.out.println("\n Response : " + response);
 
-			// Send withdraw message to Server
-			System.out.println("\n Withdraw: ");
-			WithdrawMessage withdraw = new WithdrawMessage(100);
-			withdraw.setUsername(username);
-			System.out.println("Send to server");
-			outputStream.writeObject(withdraw);
-			outputStream.flush();
-
-			// Receive deposit response
-			response = (Object) inputStream.readObject();
-			System.out.println("\n Response : " + response);
-
 		} catch (EOFException e) {
 			System.out.println("Server has closed the connection.");
 
@@ -86,7 +73,7 @@ public class Client {
 
 			e.printStackTrace();
 		}
-
+		
 		sc.close();
 	}
 }

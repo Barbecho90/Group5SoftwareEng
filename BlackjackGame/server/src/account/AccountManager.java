@@ -69,16 +69,6 @@ public class AccountManager {
 		
 	}
 	
-	public double withdraw(String username, double amount) {
-		Account account = accounts.get(username);
-		account.withdraw(amount);
-		
-		saveAccounts();
-		
-		return account.getBalance();
-		
-	}
-	
 	private void saveAccounts() {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
 			for (Account account : accounts.values()) {
