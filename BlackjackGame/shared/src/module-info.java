@@ -6,5 +6,6 @@
  */
 module shared {
 	requires junit;
-	exports modelTest;
+	exports model;
+	exports abstractMessages;
 }

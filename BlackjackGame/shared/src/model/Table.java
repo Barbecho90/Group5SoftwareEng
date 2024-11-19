@@ -54,21 +54,21 @@ public class Table {
 	}
 	
 	public Hand getDealerHand() {
-		return this.dealerHand;
+		return null;
 	}
 
 	public void setDealerHand(Hand dealerHand) {
 		//once dealer deals the cards, they will set the dealerHand
-		this.dealerHand = dealerHand;
+//		this.dealerHand = dealerHand;
 	}
 
 	public Card getDealerShowCard() {
-		return dealerShowCard;
+		return null;
 	}
 
 	public void setDealerShowCard(Card seenCard) {
 		//once dealer deals the cards, they will set the seenCard
-		this.dealerShowCard = seenCard;
+//		this.dealerShowCard = seenCard;
 	}
 
 	public void setMinBet(int minBet) {
