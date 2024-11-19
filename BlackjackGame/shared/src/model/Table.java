@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Table {
 	
 	//Dealer class should initialize with a Table
@@ -10,18 +13,28 @@ public class Table {
 	private Shoe shoe = new Shoe();
 	private Dealer hostDealer;
 	private int minCardIndBeforeShuffle;
-	private boolean isOpen;
+	private boolean isOpen;   //Indicates whether the table is open
+	private Dealer dealer;
+	private List<Player> players;
+	private final int maxPlayers;
 	
-	public Table() {
+	
+	public Table(Dealer dealer) {
 		
 		this.id = count++ ;
-		
+		this.dealer = dealer;      // Dealer starts and manages the table
+        this.players = new ArrayList<>();
+        this.maxPlayers = 5;       // Maximum 5 players
+        this.isOpen = false;
 	}
+	
 	
 	public void newPlayer() {
 		//player will call newPlayer() when they join a table to update the count
 		this.numPlayers++;
+		
 	}
+	
 	
 	
 	/*
