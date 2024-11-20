@@ -6,6 +6,7 @@ package abstractMessages;
  * NOTE: Username Required from AbstractMessage
  */
 public abstract class AbstractDeposit extends AbstractMessage {
+	
 	private double amount ;
 
 	public double getAmount() {

@@ -16,7 +16,7 @@ import model.Message;
 
 public class Client {
 
-	private static final String SERVER_ADDRESS = "192.168.0.192"; // Carolina's
+	private static final String SERVER_ADDRESS = "192.168.0.71"; // Carolina's
 	private static final int SERVER_PORT = 12345;
 
 	public static void main(String[] args) throws ClassNotFoundException {

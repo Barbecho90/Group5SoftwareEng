@@ -60,17 +60,22 @@ public class Server {
 
 				boolean isLoggedIn = false;
 
-				while(true) {
+				while (true) {
 					// Receive Login Message
 					AbstractMessage message = (AbstractMessage) inputStream.readObject();
-					// Validate the account credentials
+					// Validation logic
 					Object account = message.execute();
+					// Sending a Response back to client
 					outputStream.writeObject(account);
 					outputStream.flush();
 				}
 
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
+			}catch (EOFException e) { 
+				System.out.println("Client disconnected");
+			}
+			catch (Exception e) { 
+				System.out.println("catch");
+				System.out.println(e);
 			}
 
 		}

@@ -91,6 +91,6 @@ public class Account implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Account Balance: " + balance; // Assuming you have a balance field.
+		return "Account Balance: " + balance; 
 	}
 }
