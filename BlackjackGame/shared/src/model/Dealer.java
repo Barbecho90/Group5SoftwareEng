@@ -4,10 +4,10 @@ public class Dealer extends User {
 	private static final Card seenCard = null;
 	//private Card seenCard;
 	//private Card unseenCard;
-	private static int count = 0;
+	private int count = 0;
 	private int id;
 	private Hand dealerHand;
-	private Table table;
+	private Table table = new Table();
 	private Lobby lobby; //get Lobby from server class
 	private Card card;
 	
@@ -86,6 +86,10 @@ public class Dealer extends User {
 	
 	public Hand getDealerHand() {
 		return this.dealerHand;
+	}
+
+	public Table getTable() {
+		return this.table;
 	}
 
 	public int getId() {
