@@ -18,6 +18,7 @@ public class DepositMessage extends AbstractDeposit {
 	@Override
 	public Object execute() {
 		// TODO Auto-generated method stub
+		System.out.println("User " + getUsername() + " deposit " );
 		return AccountManager.getInstance().deposit(getUsername(), getAmount());
 	}
 

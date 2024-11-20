@@ -18,6 +18,8 @@ public class WithdrawMessage extends AbstractWithdraw {
 	@Override
 	public Object execute() {
 		// TODO Auto-generated method stub
+		System.out.println("User " + getUsername() + " withdrawl " );
+		
 		return AccountManager.getInstance().withdraw(getUsername(), getAmount());
 	}
 

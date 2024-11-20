@@ -1,6 +1,7 @@
 package abstractMessages;
 
 public abstract class AbstractWithdraw extends AbstractMessage {
+
 	private double amount;
 	private boolean withdrawAll;
 

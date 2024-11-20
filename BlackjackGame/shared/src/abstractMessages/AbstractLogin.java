@@ -1,6 +1,7 @@
 package abstractMessages;
 
 public abstract class AbstractLogin extends AbstractMessage{
+	
 	public String username;
 	public String password;
 	
