@@ -88,6 +88,10 @@ public class Dealer extends User {
 		return this.dealerHand;
 	}
 
+	public Table getTable() {
+		return this.table;
+	}
+
 	public int getId() {
 		return this.id;
 	}
