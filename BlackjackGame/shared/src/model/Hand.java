@@ -28,6 +28,14 @@ public class Hand {
 		this.isSplit = false;
 		// this.handValue =0;
 	}
+	
+	public Hand(Card Card1, Card Card2, int betAmount) {
+		hand = new ArrayList<>();
+		hand.add(Card1);
+		hand.add(Card2);
+		this.bet = betAmount;
+		this.isSplit = false;
+	}
 
 	// Method to add a card to the hand
 	public void hit(Shoe shoe) {
