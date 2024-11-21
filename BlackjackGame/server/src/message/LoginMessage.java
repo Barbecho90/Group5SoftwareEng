@@ -19,7 +19,8 @@ public class LoginMessage extends AbstractLogin {
 	@Override
 	public Object execute() {
 		System.out.println("Login "+ username);
-		return AccountManager.getInstance().login(username, password);
+		return "success";
+		//return AccountManager.getInstance().login(username, password);
 	}
 
 }
