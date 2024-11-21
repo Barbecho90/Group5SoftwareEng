@@ -1,6 +1,10 @@
-package model;
+package modelTest;
 
 import org.junit.Test;
+
+import model.Account;
+import model.ROLE;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 

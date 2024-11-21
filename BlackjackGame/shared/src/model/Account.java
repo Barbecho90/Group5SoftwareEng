@@ -4,9 +4,10 @@ import java.io.Serializable;
 
 public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
+
 	private String username;
 	private String password;
-	private User user;  
+	private User user;
 	private ROLE role;
 	private double balance;
 
@@ -21,6 +22,14 @@ public class Account implements Serializable {
 
 		this.username = username;
 		this.password = password;
+
+		System.out.println(role);
+		if (role.equals(ROLE.DEALER)) {
+			this.user = new Dealer();
+		} else {
+			this.user = new Player(this);
+		}
+
 		this.role = role;
 		this.balance = 0.0;
 
@@ -36,8 +45,16 @@ public class Account implements Serializable {
 		return username;
 	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public User getUser() {
 		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getPassword() {
@@ -48,10 +65,10 @@ public class Account implements Serializable {
 		return balance;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
-	
+
 	// Methods
 
 	public void deposit(double amount) {
@@ -62,13 +79,18 @@ public class Account implements Serializable {
 	}
 
 	public void withdraw(double amount) {
-		
-		if (amount <= 0 ) {
+
+		if (amount <= 0) {
 			throw new IllegalArgumentException("Withdrawal must be positive");
 		}
-		if  (amount > balance) {
+		if (amount > balance) {
 			throw new IllegalArgumentException("Insuficient balance");
 		}
 		balance -= amount;
+	}
+
+	@Override
+	public String toString() {
+		return "Account Balance: " + balance; 
 	}
 }
