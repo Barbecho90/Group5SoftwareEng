@@ -24,11 +24,11 @@ public class Client {
 		Scanner sc = new Scanner(System.in);
 
 		System.out.print("Enter the port number to connect: ");
-		// int port = sc.nextInt();
-		int port = SERVER_PORT;
+		int port = sc.nextInt();
+		//int port = SERVER_PORT;
 		System.out.print("Enter the host address to connect:  ");
-		// String host = sc.next();
-		String host = SERVER_ADDRESS;
+		String host = sc.next();
+		//String host = SERVER_ADDRESS;
 
 		// Client connect to the Server
 		try (Socket socket = new Socket(host, port);
@@ -40,11 +40,11 @@ public class Client {
 			System.out.println("Connected to the Server: " + host);
 
 			System.out.print("Username: ");
-			// String user name = scanner.nextLine();
-			String username = ("user1");
+			String username = scanner.nextLine();
+			//String username = ("user1");
 			System.out.print("Password: ");
-			// String password = scanner.nextLine();
-			String password = ("user1");
+			String password = scanner.nextLine();
+			//String password = ("user1");
 
 			// Send Login Message to Server
 			LoginMessage loginMessage = new LoginMessage(username, password);
