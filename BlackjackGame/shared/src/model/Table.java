@@ -81,6 +81,11 @@ public class Table {
 		return this.shoe;
 	}
 	
+	public void getNewShoe() {
+		// shoe object will be reinstated with a new shoe object. Called when cards are running low.
+		shoe = new Shoe();
+	}
+	
 	public boolean isOpen() {
 		return isOpen;
 	}
