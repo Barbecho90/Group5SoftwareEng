@@ -10,6 +10,7 @@ public class Table {
 	private Shoe shoe = new Shoe();
 	private Dealer hostDealer;
 	private int minCardIndBeforeShuffle;
+	private boolean isOpen;
 	
 	public Table() {
 		
@@ -40,7 +41,7 @@ public class Table {
 	}*/
 
 	public int getMinCardBeforeShuffle() {
-		return this.minCardBeforeShuffle;
+		return this.minCardIndBeforeShuffle;
 	}
 
 	/*public void setMinCardBeforeShuffle(Card minCardBeforeShuffle) {
@@ -53,21 +54,35 @@ public class Table {
 	}
 	
 	public Hand getDealerHand() {
-		return this.dealerHand;
+		return null;
 	}
 
 	public void setDealerHand(Hand dealerHand) {
 		//once dealer deals the cards, they will set the dealerHand
-		this.dealerHand = dealerHand;
+//		this.dealerHand = dealerHand;
 	}
 
 	public Card getDealerShowCard() {
-		return dealerShowCard;
+		return null;
 	}
 
 	public void setDealerShowCard(Card seenCard) {
 		//once dealer deals the cards, they will set the seenCard
-		this.dealerShowCard = seenCard;
+//		this.dealerShowCard = seenCard;
+	}
+
+	public void setMinBet(int minBet) {
+		// TODO Auto-generated method stub
+		this.minBet=minBet;
+	}
+
+	public Shoe getShoe() {
+		// TODO Auto-generated method stub
+		return this.shoe;
+	}
+	
+	public boolean isOpen() {
+		return isOpen;
 	}
 	
 	
