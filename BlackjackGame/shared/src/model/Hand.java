@@ -149,6 +149,10 @@ public class Hand {
 		this.handValue = getHandValue();
 	}
 
+	public Card getTopCard() {
+		// For dealers only. Returns the top card to show to players
+		return hand.getFirst();
+	}
 	// clear hand for new rounds
 	public void clear() {
 		hand.clear();
