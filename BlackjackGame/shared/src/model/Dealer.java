@@ -53,6 +53,15 @@ public class Dealer extends User {
 	}
 	
 	public void collectMoney() {
+		//iterate through all the players at the table and update their balance if they have lost
+		for (int i = 0; i < this.table.getPlayerList().size(); i++) {
+			Player player = this.table.getPlayerList().get(i);
+			Double newBalance = player.getAccount().getBalance() - player.getCurrentBet();
+			if(player.getWinStatus() == false) {
+				player.getAccount().setBalance(newBalance);
+			}
+			
+		}
 		
 	}
 	
