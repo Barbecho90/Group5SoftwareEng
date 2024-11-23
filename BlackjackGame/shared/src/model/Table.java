@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Table {
 	
 	//Dealer class should initialize with a Table
@@ -11,6 +13,7 @@ public class Table {
 	private Dealer hostDealer;
 	private int minCardIndBeforeShuffle;
 	private boolean isOpen;
+	ArrayList<Player> players = new ArrayList<>();
 	
 	public Table() {
 		
@@ -18,9 +21,14 @@ public class Table {
 		
 	}
 	
-	public void newPlayer() {
-		//player will call newPlayer() when they join a table to update the count
+	public void joinTable(Player player) {
+		this.players.add(player);
 		this.numPlayers++;
+	}
+	
+	public void leaveTable(Player player) {
+		this.players.remove(player);
+		this.numPlayers--;
 	}
 	
 	
@@ -79,6 +87,10 @@ public class Table {
 	public Shoe getShoe() {
 		// TODO Auto-generated method stub
 		return this.shoe;
+	}
+
+	public ArrayList<Player> getPlayerList(){
+		return this.players;
 	}
 	
 	public boolean isOpen() {
