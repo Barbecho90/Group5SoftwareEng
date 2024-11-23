@@ -9,7 +9,7 @@ public class Table {
 	private int id;
 	private int minBet = 2;
 	private int numPlayers = 0;
-	private Shoe shoe = new Shoe();
+	private Shoe shoe;
 	private Dealer hostDealer;
 	private int minCardIndBeforeShuffle;
 	private boolean isOpen;
@@ -18,6 +18,7 @@ public class Table {
 	public Table() {
 		
 		this.id = count++ ;
+		this.shoe = new Shoe();
 		
 	}
 	
@@ -83,7 +84,11 @@ public class Table {
 		// TODO Auto-generated method stub
 		this.minBet=minBet;
 	}
-
+	
+	public Shoe getNewShoe() {
+		this.shoe = new Shoe();
+		return this.shoe;
+	}
 	public Shoe getShoe() {
 		// TODO Auto-generated method stub
 		return this.shoe;
