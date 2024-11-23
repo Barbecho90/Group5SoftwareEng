@@ -42,14 +42,6 @@ public class Player extends User {
 		return this.winStatus;
 	}
 	
-	public void setPlayerHand(Hand hand) {
-		this.playerHand = hand;
-	}
-	
-	public Hand getPlayerHand() {
-		return this.playerHand;
-	}
-	
 	public Account getAccount() {
 		return this.account;
 	}
