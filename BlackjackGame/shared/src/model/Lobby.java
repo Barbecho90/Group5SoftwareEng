@@ -1,6 +1,6 @@
 package model;
 
-import java.util.*;
+import java.util.ArrayList;
 
 public class Lobby {
 	//Main lobby should be initialized within the server once it's running

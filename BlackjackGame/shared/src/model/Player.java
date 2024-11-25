@@ -6,6 +6,7 @@ public class Player extends User {
 	private Hand playerHand;
 	private double currentBet;
 	private Account account; // Associate with an account
+	private Boolean winStatus = false;
 
 	public Player() {
 
@@ -31,6 +32,22 @@ public class Player extends User {
 		}
 		account.withdraw(amount);
 		this.currentBet = amount;
+	}
+
+	public void setWinStatus(Boolean bool) {
+		this.winStatus = bool;
+	}
+	
+	public Boolean getWinStatus() {
+		return this.winStatus;
+	}
+	
+	public Account getAccount() {
+		return this.account;
+	}
+	
+	public double getCurrentBet() {
+		return this.currentBet;
 	}
 
 	public int getId() {

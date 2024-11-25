@@ -32,6 +32,11 @@ public class Dealer extends User {
 		
 	}
 	
+	public void getNewShoe() {
+		// Uses table object to assign it a new shoe.
+		table.getNewShoe();
+	}
+	
 	public void dealCards() {
 		//deal Cards and update player and dealer hands
 		//set dealerHand for Table
@@ -43,11 +48,20 @@ public class Dealer extends User {
 	}
 
 	public Card getNextCard(){
-		// Using the table object, call the method which accesses the shoe, which calls for the next card. Something like this i think.
+		// Using the table object, call the method which accesses the shoe, which calls for the next card.
 		return table.getShoe().dealNextCard();
 	}
 	
 	public void collectMoney() {
+		//iterate through all the players at the table and update their balance if they have lost
+		for (int i = 0; i < this.table.getPlayerList().size(); i++) {
+			Player player = this.table.getPlayerList().get(i);
+			Double newBalance = player.getAccount().getBalance() - player.getCurrentBet();
+			if(player.getWinStatus() == false) {
+				player.getAccount().setBalance(newBalance);
+			}
+			
+		}
 		
 	}
 	
@@ -64,9 +78,8 @@ public class Dealer extends User {
 	}*/
 	
 	public Card getSeenCard() {
-		// Call hand method to return card.
-		// TODO: implement when DealerHand is implemented
-		return null;
+		// from dealerHand object, get their card to be used to show to other players.
+		return dealerHand.getTopCard();
 	}
 	
 	/*public void setUnseenCard(Card unseenCard) {
