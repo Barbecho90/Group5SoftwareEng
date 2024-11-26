@@ -2,165 +2,82 @@ package model;
 
 import java.util.ArrayList;
 
-public class Hand {
-	private ArrayList<Card> hand;
-	private int bet;
-	private boolean isSplit = false;
-	private int handValue = 0;
-	private boolean busted;
-	private boolean canSplit;
-	private boolean canDoubleDown;
+public class Player extends User {
+	private static int count = 0;
+	private int id;
+	private ArrayList<Hand> hands;
+	private Hand playerHand;
+	private Hand playerSplitHand;
+	private double currentBet;
+	private Account account; // Associate with an account
+	private Boolean winStatus = false;
 
-	// First ask amount to bet, then we hand one card to all players and then the
-	// other hand
-//	public Hand(Card card1, Card card2, int bet) {
-//		hand = new ArrayList<>();
-////		hand.add(card1);
-////		hand.add(card2);
-////		updateHandValue();
-////		this.bet = bet;
-//	}
+	public Player() {
 
-	// Default Constructor
-	public Hand() {
-		hand = new ArrayList<>();
-		this.bet = 0;
-		this.isSplit = false;
-		// this.handValue =0;
+	}
+
+	public Player(Account account) {
+		if (account == null) {
+			throw new IllegalArgumentException("Account can not be null");
+
+		}
+		this.account = account;
+		this.id = ++count;
+		this.playerHand = new Hand();
+		this.playerSplitHand = new Hand();
+		this.hands.add(playerHand);
+		this.hands.add(playerSplitHand);
+		this.currentBet = 0;
+	}
+
+	public void placeBet(double amount) {
+		if (amount <= 0) {
+			throw new IllegalArgumentException("Bet amount  must be positive.");
+		}
+		if (amount > account.getBalance()) {
+			throw new IllegalArgumentException("Insufficient balance to place a Bet. ");
+		}
+		account.withdraw(amount);
+		this.currentBet = amount;
+	}
+
+	public ArrayList<Hand> getHands() {
+		return hands;
 	}
 	
-	public Hand(Card Card1, Card Card2, int betAmount) {
-		hand = new ArrayList<>();
-		hand.add(Card1);
-		hand.add(Card2);
-		this.bet = betAmount;
-		this.isSplit = false;
+	public void setWinStatus(Boolean bool) {
+		this.winStatus = bool;
+	}
+	
+	public Boolean getWinStatus() {
+		return this.winStatus;
+	}
+	
+	public Account getAccount() {
+		return this.account;
+	}
+	
+	public double getCurrentBet() {
+		return this.currentBet;
 	}
 
-	// Method to add a card to the hand
-	public void hit(Shoe shoe) {
-		addCard(shoe.dealNextCard());
-		updateHandValue();
-		calculateActions();
+	public int getId() {
+		return id;
 	}
 
-	// Adds a card to the hand
-	public void addCard(Card card) {
-		hand.add(card);
-		updateHandValue();
+	@Override
+	public void login() {
+		// TODO Auto-generated method stub
 
 	}
+	 // Method to reset current bet to 0 
+    public void resetCurrentBet() {
+        this.currentBet = 0;
+    }
 
-	// Removes a card from the current hand and creates a new hand and returns
-	// the new hand with the removed card.
-	public ArrayList<Card> setSplit() {
-		this.isSplit = true;
-		ArrayList<Card> splitHand = new ArrayList<Card>();
-		splitHand.add(hand.get(1));
-		hand.remove(1);
-		updateHandValue();
-		return splitHand;
-	}
-
-	public boolean canSplit() {
-		return canSplit;
-	}
-
-	public boolean canDoubleDown() {
-		return canDoubleDown;
-	}
-
-	public boolean isBusted() {
-		return busted;
-	}
-
-	public int getBet() {
-		return this.bet;
-	}
-
-	public boolean getIsSplit() {
-		return this.isSplit;
-	}
-
-	public int getTotalCards() {
-		return hand.size();
-	}
-
-	// Calculates the total value of the hand, considering Aces as high or low
-	public int getHandValue() {
-		int handValue = 0;
-		for (Card card : hand) {
-			if (card.getRank().equals(Card.CardRank.Ace)) {
-				if (handValue + Constants.ACE_HIGH > Constants.MAX_HAND_VALUE) {
-					handValue += Constants.ACE_LOW;
-
-				} else {
-					handValue += Constants.ACE_HIGH;
-				}
-			} else {
-				handValue += card.getNumericalValue();
-			}
-
-		}
-		return handValue;
-	}
-
-	// Helper Methods
-	private void calculateActions() {
-		calculateBust();
-		calculateDoubleDown();
-		calculateCanSplit();
-	}
-
-	private void calculateBust() {
-		this.busted = getHandValue() > Constants.MAX_HAND_VALUE;
-	}
-
-	private void calculateDoubleDown() {
-		if (hand.size() != 2) {
-			this.canDoubleDown = false;
-			return;
-		}
-
-		int value = getHandValue();
-
-		canDoubleDown = value == 9 || value == 10 || value == 11;
-	}
-
-	public void doubleDown(Shoe shoe) {
-		this.bet *= 2;
-		this.hit(shoe);
-	}
-
-	private void calculateCanSplit() {
-		if (hand.size() != 2) {
-			this.canSplit = false;
-			return;
-		}
-
-		Card cardOne = hand.get(0);
-		Card cardTwo = hand.get(1);
-
-		canSplit = cardOne.getNumericalValue() == cardTwo.getNumericalValue();
-	}
-
-	// Updates the total hand value
-	private void updateHandValue() {
-		this.handValue = getHandValue();
-	}
-
-	public Card getTopCard() {
-		// For dealers only. Returns the top card to show to players
-		return hand.getFirst();
-	}
-	// clear hand for new rounds
-	public void clear() {
-		hand.clear();
-		handValue = 0;
-		isSplit = false;
-		busted = false;
-		canSplit = false;
-		canDoubleDown = false;
-	}
+	@Override
+    public String toString() {
+        return "Player ID: " + id + ", Current Bet: " + currentBet + ", Account Balance: " + account.getBalance();
+    }
 
 }
