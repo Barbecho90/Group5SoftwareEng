@@ -51,12 +51,12 @@ public class Hand {
 
 	}
 
-	// Removes a card from the current hand and creates a new hand and returns
+	// Removes a card from the current hand and creates a new hand object and returns
 	// the new hand with the removed card.
-	public ArrayList<Card> setSplit() {
+	public Hand setSplit() {
 		this.isSplit = true;
-		ArrayList<Card> splitHand = new ArrayList<Card>();
-		splitHand.add(hand.get(1));
+		Hand splitHand = new Hand();
+		splitHand.getHand().add(hand.get(1));
 		hand.remove(1);
 		updateHandValue();
 		return splitHand;
@@ -82,6 +82,10 @@ public class Hand {
 		return this.isSplit;
 	}
 
+	public ArrayList<Card> getHand(){
+		return hand;
+	}
+	
 	public int getTotalCards() {
 		return hand.size();
 	}
