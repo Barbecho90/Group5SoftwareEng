@@ -26,6 +26,7 @@ public class Card{
 			case 1: this.Suit = CardSuit.Hearts; break;
 			case 2: this.Suit = CardSuit.Clubs; break;
 			case 3: this.Suit = CardSuit.Diamonds; break;
+			default: this.Suit = CardSuit.Spades; break;
 		}
 		switch(rankInt) {
 			case 1: values[0] = 1; values[1] = 11; this.Rank = CardRank.Ace; break;
@@ -41,6 +42,7 @@ public class Card{
 			case 11: values[0] = 10; this.Rank = CardRank.Jack; break;
 			case 12: values[0] = 10; this.Rank = CardRank.Queen; break;
 			case 13: values[0] = 10; this.Rank = CardRank.King; break;
+			default: values[0] = 10; this.Rank = CardRank.King; break;
 		}
 	}
 
