@@ -57,6 +57,8 @@ public class Hand {
 		this.isSplit = true;
 		Hand splitHand = new Hand();
 		splitHand.getHand().add(hand.get(1));
+		splitHand.setBet(bet);
+		splitHand.isSplit = true;
 		hand.remove(1);
 		updateHandValue();
 		return splitHand;
@@ -74,6 +76,10 @@ public class Hand {
 		return busted;
 	}
 
+	public void setBet(int bet) {
+		this.bet = bet;
+	}
+	
 	public int getBet() {
 		return this.bet;
 	}
