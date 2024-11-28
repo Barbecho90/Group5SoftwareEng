@@ -9,6 +9,8 @@ import javax.swing.event.ListSelectionListener;
 import message.LoginMessage;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class ClientGui extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -108,6 +110,7 @@ public class ClientGui extends JFrame {
 
 	}
 
+	
 	private void openMainAppFrame() {
 
 		// Close the current login frame
@@ -115,12 +118,12 @@ public class ClientGui extends JFrame {
 		// Create a new JFrame for the main application
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int frameWidth = (int) (screenSize.width * 0.5);
-		int frameHeigth = (int) (screenSize.height * 0.5);
+		int frameHeight = (int) (screenSize.height * 0.5);
 
 		// create a new frame
 		JFrame frame = new JFrame("Welcome");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(frameWidth, frameHeigth);
+		frame.setSize(frameWidth, frameHeight);
 		frame.setLayout(new GridBagLayout()); // it allows flexible component arrangement
 		frame.setLocationRelativeTo(null); // center the frame on the screen
 
@@ -152,6 +155,79 @@ public class ClientGui extends JFrame {
 		JButton button3 = new JButton("Join Table");
 		JButton button4 = new JButton("Disconnect");
 
+		button1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame DepositFrame = new JFrame("Deposit");
+				DepositFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				DepositFrame.setSize(frameWidth, frameHeight);
+				DepositFrame.setLayout(new GridBagLayout()); // it allows flexible component arrangement
+				DepositFrame.setLocationRelativeTo(null); // center the frame on the screen
+				
+				JPanel DepositPanel = new JPanel();
+				DepositPanel.setLayout(new GridLayout(8, 1, 1, 10));
+				
+				JButton submitDeposit = new JButton("Deposit");
+				
+				JTextField numberField = new JTextField(20);
+				
+				submitDeposit.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					int number = Integer.parseInt(numberField.getText());
+					JOptionPane.showMessageDialog(DepositFrame, number);
+					numberField.setText("");
+					}
+				});
+				
+				DepositPanel.add(numberField);
+				DepositPanel.add(submitDeposit);
+				DepositFrame.add(DepositPanel);
+				DepositFrame.setVisible(true);
+
+			}
+		});
+		
+		button2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame WithdrawlFrame = new JFrame("Withdrawl");
+				WithdrawlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				WithdrawlFrame.setSize(frameWidth, frameHeight);
+				WithdrawlFrame.setLayout(new GridBagLayout()); // it allows flexible component arrangement
+				WithdrawlFrame.setLocationRelativeTo(null); // center the frame on the screen
+				
+				JPanel WithdrawlPanel = new JPanel();
+				WithdrawlPanel.setLayout(new GridLayout(8, 1, 1, 10));
+				
+				JTextField numberField = new JTextField(20);
+				
+				JButton submitWithdrawl = new JButton("Withdrawl");
+				
+				submitWithdrawl.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					int number = Integer.parseInt(numberField.getText());
+					JOptionPane.showMessageDialog(WithdrawlFrame, number);
+					numberField.setText("");
+					}
+				});
+				
+				WithdrawlPanel.add(numberField);
+				WithdrawlPanel.add(submitWithdrawl);
+				WithdrawlFrame.add(WithdrawlPanel);
+				WithdrawlFrame.setVisible(true);
+			}
+		});
+		
+		button3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "Pushed");
+			}
+		});
+		
+		button4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		
 		buttonPanel.add(button1);
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
