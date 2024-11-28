@@ -73,11 +73,10 @@ public class ClientGui extends JFrame {
 		int port = Integer.parseInt(portField.getText());
 		String username = usernameField.getText();
 		String password = new String(passwordField.getPassword());
-
+		
 		try (Socket socket = new Socket(host, port);
 				ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
-
 			// Send Login Message
 			LoginMessage loginMessage = new LoginMessage(username, password);
 			outputStream.writeObject(loginMessage);
@@ -155,78 +154,7 @@ public class ClientGui extends JFrame {
 		JButton button3 = new JButton("Join Table");
 		JButton button4 = new JButton("Disconnect");
 
-		button1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFrame DepositFrame = new JFrame("Deposit");
-				DepositFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				DepositFrame.setSize(frameWidth, frameHeight);
-				DepositFrame.setLayout(new GridBagLayout()); // it allows flexible component arrangement
-				DepositFrame.setLocationRelativeTo(null); // center the frame on the screen
-				
-				JPanel DepositPanel = new JPanel();
-				DepositPanel.setLayout(new GridLayout(8, 1, 1, 10));
-				
-				JButton submitDeposit = new JButton("Deposit");
-				
-				JTextField numberField = new JTextField(20);
-				
-				submitDeposit.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					int number = Integer.parseInt(numberField.getText());
-					JOptionPane.showMessageDialog(DepositFrame, number);
-					numberField.setText("");
-					}
-				});
-				
-				DepositPanel.add(numberField);
-				DepositPanel.add(submitDeposit);
-				DepositFrame.add(DepositPanel);
-				DepositFrame.setVisible(true);
-
-			}
-		});
 		
-		button2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFrame WithdrawlFrame = new JFrame("Withdrawl");
-				WithdrawlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				WithdrawlFrame.setSize(frameWidth, frameHeight);
-				WithdrawlFrame.setLayout(new GridBagLayout()); // it allows flexible component arrangement
-				WithdrawlFrame.setLocationRelativeTo(null); // center the frame on the screen
-				
-				JPanel WithdrawlPanel = new JPanel();
-				WithdrawlPanel.setLayout(new GridLayout(8, 1, 1, 10));
-				
-				JTextField numberField = new JTextField(20);
-				
-				JButton submitWithdrawl = new JButton("Withdrawl");
-				
-				submitWithdrawl.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					int number = Integer.parseInt(numberField.getText());
-					JOptionPane.showMessageDialog(WithdrawlFrame, number);
-					numberField.setText("");
-					}
-				});
-				
-				WithdrawlPanel.add(numberField);
-				WithdrawlPanel.add(submitWithdrawl);
-				WithdrawlFrame.add(WithdrawlPanel);
-				WithdrawlFrame.setVisible(true);
-			}
-		});
-		
-		button3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, "Pushed");
-			}
-		});
-		
-		button4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
 		
 		buttonPanel.add(button1);
 		buttonPanel.add(button2);
@@ -261,30 +189,28 @@ public class ClientGui extends JFrame {
 				}
 			}
 		});
-
-		// Add listeners for each buttons
 		
-//				button1.addActionListener(e -> {
-//					int selectedIndex = jList.getSelectedIndex();
-//					if (selectedIndex != -1) {
-//						model.Table selectedDvd = dvdList.dvdArray()[selectedIndex];
-//						Consumer<Void> callback = (result) -> { // call back to refresh list
-//							this.refreshDVDListModel();
-//						};
-//						new DetailGUI(frame, dvdList, selectedDvd, callback);
-//					}
-//				});
-//
-//				button2.addActionListener(e -> doGetDVDsByRating());
-//				button3.addActionListener(e -> doGetTotalRunningTime());
-//				button4.addActionListener(e -> doAddOrModifyDVD());
+		//add action listeners
+		button1.addActionListener(e -> openDepositFrame());
+		button2.addActionListener(e -> openWithdrawFrame());
+		button3.addActionListener(new ActionListener() {  //TODO: make a player join a table
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "Pushed");
+			}
+		});
+		
+		button4.addActionListener(new ActionListener() { //close the window
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		
 		// Make the frame visible
 		frame.setVisible(true);
 
 	}	
 
-	private void openDealerTableSelectionFrame() {
+	private void openDealerTableSelectionFrame() { //Placeholder TODO: Implement dealer view
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int frameWidth = (int) (screenSize.width * 0.5);
 		int frameHeigth = (int) (screenSize.height * 0.5);
@@ -357,7 +283,7 @@ public class ClientGui extends JFrame {
 		});
 	}
 	
-	private void openGameFrame() {
+	private void openGameFrame() { //placeholder TODO: Implement Gameframe
 		// Close the current login frame
 		this.dispose();
 		// Create a new JFrame for the main application
@@ -387,7 +313,73 @@ public class ClientGui extends JFrame {
 		mainAppFrame.setVisible(true);
 		// dimensions according to the current screen size
 	}
+	
+	private void openDepositFrame() {
 
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int frameWidth = (int) (screenSize.width * 0.5);
+		int frameHeight = (int) (screenSize.height * 0.5);
+		JFrame DepositFrame = new JFrame("Deposit");
+		DepositFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		DepositFrame.setSize(frameWidth, frameHeight);
+		DepositFrame.setLayout(new GridBagLayout()); // it allows flexible component arrangement
+		DepositFrame.setLocationRelativeTo(null); // center the frame on the screen
+		
+		JPanel DepositPanel = new JPanel();
+		DepositPanel.setLayout(new GridLayout(8, 1, 1, 10));
+		
+		JButton submitDeposit = new JButton("Deposit");
+		
+		JTextField numberField = new JTextField(20);
+		
+		submitDeposit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			int number = Integer.parseInt(numberField.getText());
+			JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+			numberField.setText("");
+			openMainAppFrame();
+			}
+			
+		});
+		
+		DepositPanel.add(numberField);
+		DepositPanel.add(submitDeposit);
+		DepositFrame.add(DepositPanel);
+		DepositFrame.setVisible(true);
+	}
+
+	private void openWithdrawFrame() {
+		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int frameWidth = (int) (screenSize.width * 0.5);
+		int frameHeight = (int) (screenSize.height * 0.5);
+		JFrame WithdrawlFrame = new JFrame("Withdrawl");
+		WithdrawlFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		WithdrawlFrame.setSize(frameWidth, frameHeight);
+		WithdrawlFrame.setLayout(new GridBagLayout()); // it allows flexible component arrangement
+		WithdrawlFrame.setLocationRelativeTo(null); // center the frame on the screen
+		
+		JPanel WithdrawlPanel = new JPanel();
+		WithdrawlPanel.setLayout(new GridLayout(8, 1, 1, 10));
+		
+		JTextField numberField = new JTextField(20);
+		
+		JButton submitWithdrawl = new JButton("Withdrawl");
+		
+		submitWithdrawl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			int number = Integer.parseInt(numberField.getText());
+			JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdrawn");
+			numberField.setText("");
+			openMainAppFrame();
+			}
+		});
+		
+		WithdrawlPanel.add(numberField);
+		WithdrawlPanel.add(submitWithdrawl);
+		WithdrawlFrame.add(WithdrawlPanel);
+		WithdrawlFrame.setVisible(true);
+	}
 	// Main method to launch the GUI
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
