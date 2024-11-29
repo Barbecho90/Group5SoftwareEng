@@ -20,6 +20,8 @@ public class ClientGui extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private DefaultListModel<String> tableListModel = new DefaultListModel<>(); // To store the list of Tables
+	
+	private LoginMessage loginMessage;
 
 	private static final String SERVER_ADDRESS = "192.168.0.71"; // Default
 	private static final int SERVER_PORT = 12345;
@@ -78,7 +80,7 @@ public class ClientGui extends JFrame {
 				ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
 				ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
 			// Send Login Message
-			LoginMessage loginMessage = new LoginMessage(username, password);
+			loginMessage = new LoginMessage(username, password);
 			outputStream.writeObject(loginMessage);
 			outputStream.flush();
 
@@ -90,9 +92,11 @@ public class ClientGui extends JFrame {
 				JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 				// Close the current login frame
 				this.dispose();
-				// main frame after login and connect to server
-				//TODO: Check user's Role and open different pane based on role
-				openMainAppFrame();
+				if (loginMessage.username.contains("user")) {
+					openMainAppFrame();
+				} else if (loginMessage.username.contains("dealer")) {
+					openDealerTableSelectionFrame();
+				}
 
 			} else {
 				JOptionPane.showMessageDialog(this, "Login Failed: " + loginResponse, "Error",
@@ -199,11 +203,7 @@ public class ClientGui extends JFrame {
 			}
 		});
 		
-		button4.addActionListener(new ActionListener() { //close the window
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		button4.addActionListener(e -> disconnect());
 		
 		// Make the frame visible
 		frame.setVisible(true);
@@ -281,6 +281,12 @@ public class ClientGui extends JFrame {
 				}
 			}
 		});
+		
+		button1.addActionListener(e -> joinTable());
+		button2.addActionListener(e -> createTable());
+		button3.addActionListener(e -> disconnect());
+		
+		frame.setVisible(true);
 	}
 	
 	private void openGameFrame() { //placeholder TODO: Implement Gameframe
@@ -337,7 +343,7 @@ public class ClientGui extends JFrame {
 			int number = Integer.parseInt(numberField.getText());
 			JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
 			numberField.setText("");
-			openMainAppFrame();
+			DepositFrame.dispose();
 			}
 			
 		});
@@ -370,8 +376,10 @@ public class ClientGui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
 			JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdrawn");
+			// INSERT call to AccountManager that calls saveAccounts().
+			// Need to implement a way to save this change into data.txt
 			numberField.setText("");
-			openMainAppFrame();
+			WithdrawlFrame.dispose();
 			}
 		});
 		
@@ -380,6 +388,19 @@ public class ClientGui extends JFrame {
 		WithdrawlFrame.add(WithdrawlPanel);
 		WithdrawlFrame.setVisible(true);
 	}
+	
+	public void joinTable() {
+		
+	}
+
+	public void createTable() {
+		
+	}
+	
+	public void disconnect() {
+		System.exit(0);
+	}
+	
 	// Main method to launch the GUI
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
