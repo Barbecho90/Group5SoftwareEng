@@ -5,4 +5,6 @@ public class Constants {
     public static int ACE_HIGH = 11;
     public static int ACE_LOW = 1;
     public static int MAX_HAND_VALUE = 21;
+    public static int MAX_PLAYERS = 5;
+    
 }

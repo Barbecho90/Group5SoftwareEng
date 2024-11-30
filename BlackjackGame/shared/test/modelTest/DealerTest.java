@@ -7,14 +7,14 @@ import org.junit.Test;
 import model.Card;
 import model.Dealer;
 import model.Lobby;
-import model.Table;
+import model.AbstractTable;
 
 public class DealerTest {
 	
 	int minBet = 3;
 	Lobby lobby = new Lobby();
 	Dealer dealer = new Dealer(lobby, minBet );
-	Table table = dealer.getTable();
+	AbstractTable table = dealer.getTable();
 	
 	//test to see if lobby, table, and dealer are updated on initialization 
 	@Test

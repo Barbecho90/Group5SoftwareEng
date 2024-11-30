@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Lobby {
 	//Main lobby should be initialized within the server once it's running
-	ArrayList<Table> tables = new ArrayList<Table>();
+	ArrayList<AbstractTable> tables = new ArrayList<AbstractTable>();
 	int numTables = 0;
 	int availableDealers = 0;
 	
 	public Lobby() {
-		this.tables = new ArrayList<Table>();
+		this.tables = new ArrayList<AbstractTable>();
 	}
 	
 	//update dealer count
@@ -22,7 +22,7 @@ public class Lobby {
 	}
 	
 	//getters
-	public ArrayList<Table> getTableList(){
+	public ArrayList<AbstractTable> getTableList(){
 		return this.tables;
 	}
 	

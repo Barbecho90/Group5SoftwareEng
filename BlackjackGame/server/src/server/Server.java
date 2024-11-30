@@ -6,8 +6,9 @@ import java.util.concurrent.Executors;
 
 import abstractMessages.AbstractMessage;
 import account.AccountManager;
+import message.LoginMessage;
 import model.Account;
-import model.Message;
+
 import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
@@ -45,11 +46,9 @@ public class Server {
 
 	static class ClientHandler implements Runnable {
 		private final Socket clientSocket;
-		private final AccountManager accountManager;
 
 		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
-			this.accountManager = AccountManager.getInstance();
 		}
 
 		@Override
@@ -61,19 +60,32 @@ public class Server {
 				boolean isLoggedIn = false;
 
 				while (true) {
-					// Receive Login Message
 					AbstractMessage message = (AbstractMessage) inputStream.readObject();
-					// Validation logic
-					Object account = message.execute();
-					// Sending a Response back to client
-					outputStream.writeObject(account);
-					outputStream.flush();
+
+					// Receive Login Message
+					if (message instanceof LoginMessage) {
+						Account account = (Account) message.execute();
+
+						// If login successful save socket to user
+						if (account != null) {
+							AccountManager.getInstance().getAccount(message.getUsername()).getUser()
+									.setSocket(clientSocket);
+							System.out.println("Client Socket attached to User");
+						}
+
+						outputStream.writeObject(account);
+						outputStream.flush();
+					} else {
+						Object account = message.execute();
+						// Sending a Response back to client
+						outputStream.writeObject(account);
+						outputStream.flush();
+					}
 				}
 
-			}catch (EOFException e) { 
+			} catch (EOFException e) {
 				System.out.println("Client disconnected");
-			}
-			catch (Exception e) { 
+			} catch (Exception e) {
 				System.out.println("catch");
 				System.out.println(e);
 			}

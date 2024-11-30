@@ -6,7 +6,12 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import message.DepositMessage;
 import message.LoginMessage;
+import message.WithdrawMessage;
+import model.Account;
+import serverCommunicator.SendMessage;
+import state.StateManager;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,6 +21,7 @@ public class ClientGui extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField hostField;
 	private JTextField portField;
+	private JLabel balance;
 	private JTextArea responseArea;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
@@ -76,19 +82,32 @@ public class ClientGui extends JFrame {
 		String username = usernameField.getText();
 		String password = new String(passwordField.getPassword());
 		
-		try (Socket socket = new Socket(host, port);
-				ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
+		try {
+			socket = new Socket(host, port);
+			ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+					
 			// Send Login Message
 			loginMessage = new LoginMessage(username, password);
 			outputStream.writeObject(loginMessage);
 			outputStream.flush();
 
 			// Receive login response
-			Object loginResponse = inputStream.readObject();
+			Account loginResponse = (Account) inputStream.readObject();
 
 			// Check Server's response
-			if ("success".equals(loginResponse)) {
+			if (loginResponse != null) {
+				// Set Account for local use
+				StateManager.getInstance().setAccount(loginResponse);
+				
+				// Save connection state
+				StateManager.getInstance().getAccount().getUser().setSocket(socket);
+				StateManager.getInstance().getClient().setInputStream(inputStream);
+				StateManager.getInstance().getClient().setOutputStream(outputStream);
+				
+				// keep connection open
+				startListeningForServerMessages();
+				
 				JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 				// Close the current login frame
 				this.dispose();
@@ -157,6 +176,7 @@ public class ClientGui extends JFrame {
 		JButton button2 = new JButton("Withdraw Funds");
 		JButton button3 = new JButton("Join Table");
 		JButton button4 = new JButton("Disconnect");
+		balance = new JLabel("ACCOUNT BALANCE:$" + StateManager.getInstance().getAccount().getBalance());
 
 		
 		
@@ -164,6 +184,7 @@ public class ClientGui extends JFrame {
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
 		buttonPanel.add(button4);
+		buttonPanel.add(balance);
 
 		// Disable button until user selects from the list
 		button3.setEnabled(false);
@@ -341,7 +362,20 @@ public class ClientGui extends JFrame {
 		submitDeposit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
-			JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+			
+			// Send Deposit message, get account balance as response and update local account
+			DepositMessage dposit = new DepositMessage(number);
+			Object resp = SendMessage.getInstance().send(dposit);
+			System.out.print("Deposit Made new balance = " + resp);
+			
+			if(resp != null) {
+				StateManager.getInstance().getAccount().setBalance((double) resp);
+				balance.setText("Account Balance: " + (double) resp);
+				JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+			} else {
+				JOptionPane.showMessageDialog(DepositFrame, "Error funds not deposited!");
+			}
+			
 			numberField.setText("");
 			DepositFrame.dispose();
 			}
@@ -375,9 +409,19 @@ public class ClientGui extends JFrame {
 		submitWithdrawl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
-			JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdrawn");
-			// INSERT call to AccountManager that calls saveAccounts().
-			// Need to implement a way to save this change into data.txt
+			
+			WithdrawMessage withdraw = new WithdrawMessage(number);
+			Object resp = SendMessage.getInstance().send(withdraw);
+			
+			if(resp != null) {
+				StateManager.getInstance().getAccount().setBalance((double) resp);
+				balance.setText("Account Balance: " + (double) resp);
+				JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
+			} else {
+				JOptionPane.showMessageDialog(WithdrawlFrame, "Error funds not withdraw!");
+			
+			}
+			
 			numberField.setText("");
 			WithdrawlFrame.dispose();
 			}
@@ -408,5 +452,22 @@ public class ClientGui extends JFrame {
 			clientGui.setVisible(true);
 		});
 	}
+	
+	private void startListeningForServerMessages() {
+	    new Thread(() -> {
+	    	// TODO: Add implementation of method listener here, this will be used when the server broadcasts messages to update clients on game state
+//	        try {
+//	            ObjectInputStream inputStream = StateManager.getInstance().getClient().getInputStream();
+	            while (true) {
+//	                Object message = inputStream.readObject();
+	                // Handle incoming messages
+//	                System.out.println("Received message: " + message);
+	            }
+//	        } catch (IOException | ClassNotFoundException e) {
+//	            System.err.println("Connection lost: " + e.getMessage());
+//	        }
+	    }).start();
+	}
+
 
 }
