@@ -11,14 +11,15 @@ import model.Shoe;
 import model.Hand;
 import model.Card;
 
-class HandTest {
-	int bet = 10;
-	Shoe shoe = new Shoe();
-	Hand hand = new Hand(shoe.dealNextCard(), shoe.dealNextCard(), bet);
+public class HandTest {
 	
 	// Tests constructor, getHand, getHandValue, getBet, and updateHandValue
 	@Test
-	void testHandConstructor() {
+	public void testHandConstructor() {
+		int bet = 10;
+		Shoe shoe = new Shoe();
+		Hand hand = new Hand(shoe.dealNextCard(), shoe.dealNextCard(), bet);
+		
 		assertEquals(hand.getHand().get(0), shoe.getShoe()[0]);
 		assertEquals(hand.getHand().get(1), shoe.getShoe()[1]);
 		assertEquals(hand.getHandValue(), shoe.getShoe()[0].getValues()[0]
@@ -27,14 +28,22 @@ class HandTest {
 	}
 	
 	@Test
-	void testHandHit() {
+	public void testHandHit() {
+		int bet = 10;
+		Shoe shoe = new Shoe();
+		Hand hand = new Hand(shoe.dealNextCard(), shoe.dealNextCard(), bet);
+		
 		hand.hit(shoe);
-		assertEquals(hand.getHand().getLast(), shoe.getShoe()[2]);
+		assertEquals(hand.getHand().get(2), shoe.getShoe()[2]);
 	}
 	
 	// Tests split for hand. And tests value of the new hand
 	@Test 
-	void testSetSplit() {
+	public void testSetSplit() {
+		int bet = 10;
+		Shoe shoe = new Shoe();
+		Hand hand = new Hand(shoe.dealNextCard(), shoe.dealNextCard(), bet);
+		
 		Hand secondHand = hand.setSplit();
 		assertEquals(hand.getIsSplit(), true);
 		assertEquals(hand.getHand().get(0), shoe.getShoe()[0]);
@@ -45,10 +54,14 @@ class HandTest {
 	}
 	
 	@Test
-	void testDoubleDown() {
+	public void testDoubleDown() {
+		int bet = 10;
+		Shoe shoe = new Shoe();
+		Hand hand = new Hand(shoe.dealNextCard(), shoe.dealNextCard(), bet);
+		
 		hand.doubleDown(shoe);
-		assertEquals(hand.getBet(), this.bet * 2);
-		assertEquals(hand.getHand().get(2), shoe.getShoe()[2]);
+		assertEquals(hand.getBet(), bet * 2);
+		assertEquals(hand.getHand().get(1), shoe.getShoe()[1]);
 	}
 
 }

@@ -1,9 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Player extends User {
 	private static int count = 0;
 	private int id;
+	private ArrayList<Hand> hands;
 	private Hand playerHand;
+	private Hand playerSplitHand;
 	private double currentBet;
 	private Account account; // Associate with an account
 	private Boolean winStatus = false;
@@ -20,6 +24,9 @@ public class Player extends User {
 		this.account = account;
 		this.id = ++count;
 		this.playerHand = new Hand();
+		this.playerSplitHand = new Hand();
+		this.hands.add(playerHand);
+		this.hands.add(playerSplitHand);
 		this.currentBet = 0;
 	}
 
@@ -34,6 +41,10 @@ public class Player extends User {
 		this.currentBet = amount;
 	}
 
+	public ArrayList<Hand> getHands() {
+		return hands;
+	}
+	
 	public void setWinStatus(Boolean bool) {
 		this.winStatus = bool;
 	}
