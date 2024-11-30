@@ -77,7 +77,9 @@ public class Hand {
 	public int getBet() {
 		return this.bet;
 	}
-
+	public void setBet(int bet) {
+		this.bet = bet;
+	}
 	public boolean getIsSplit() {
 		return this.isSplit;
 	}
@@ -162,5 +164,8 @@ public class Hand {
 		canSplit = false;
 		canDoubleDown = false;
 	}
+	
+	
+	
 
 }

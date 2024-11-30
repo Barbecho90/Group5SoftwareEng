@@ -7,7 +7,7 @@ public class Dealer extends User {
 	private int count = 0;
 	private int id;
 	private Hand dealerHand;
-	private Table table = new Table();
+	private AbstractTable table;
 	private Lobby lobby; //get Lobby from server class
 	private Card card;
 	
@@ -101,7 +101,7 @@ public class Dealer extends User {
 		return this.dealerHand;
 	}
 
-	public Table getTable() {
+	public AbstractTable getTable() {
 		return this.table;
 	}
 

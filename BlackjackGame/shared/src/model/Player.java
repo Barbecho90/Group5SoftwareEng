@@ -53,6 +53,14 @@ public class Player extends User {
 	public int getId() {
 		return id;
 	}
+	
+	public Hand getHand() {
+		return this.playerHand;
+	}
+	
+	public void setHand(Hand hand) {
+		this.playerHand = hand;
+	}
 
 	@Override
 	public void login() {
