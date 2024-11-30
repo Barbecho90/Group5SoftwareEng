@@ -1,5 +1,8 @@
 package serverModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.AbstractTable;
 import model.Dealer;
 import model.Hand;
@@ -7,12 +10,16 @@ import model.Player;
 
 public class Table extends AbstractTable {
 	private GAME_STATE state;
+	
+	private List<Player> turnOrder;
+	
 
 	public Table(Dealer dealer) {
 		super(dealer); // Uses the superclass constructor (AbstractTable) to be able to get all the
 						// functionality of the AbstractTable
 
 		this.state = GAME_STATE.IDLE;
+		this.turnOrder = new ArrayList<Player>();
 	}
 
 	public void startRound() {
@@ -20,7 +27,9 @@ public class Table extends AbstractTable {
 			throw new IllegalStateException("Round already in progress");
 		}
 		state = GAME_STATE.INIT;
-
+		turnOrder.clear();
+		turnOrder.addAll(players);
+		
 		// Make sure everything is empty
 		this.hostDealer.setDealerHand(new Hand());
 
@@ -36,6 +45,11 @@ public class Table extends AbstractTable {
 
 		//
 		System.out.println("Waiting for bets....");
+		
+		for (Player player: turnOrder) {
+			// Set player bet to zero, send the command to place bet
+		}
+		
 		dealInitialCards();
 	}
 

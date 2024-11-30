@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Player extends User {
+public class Player extends User implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private static int count = 0;
 	private int id;
 	private ArrayList<Hand> hands;
@@ -23,6 +25,7 @@ public class Player extends User {
 		}
 		this.account = account;
 		this.id = ++count;
+		this.hands = new ArrayList<Hand>();
 		this.playerHand = new Hand();
 		this.playerSplitHand = new Hand();
 		this.hands.add(playerHand);

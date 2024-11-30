@@ -1,6 +1,9 @@
 package model;
 
-public class Dealer extends User {
+import java.io.Serializable;
+
+public class Dealer extends User implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Card seenCard = null;
 	//private Card seenCard;
 	//private Card unseenCard;
@@ -106,9 +109,9 @@ public class Dealer extends User {
 				return null;
 	}*/
 	
-	/*public void setDealerHand(Hand dealerHand) {
+	public void setDealerHand(Hand dealerHand) {
 		this.dealerHand = dealerHand;
-	}*/
+	}
 	
 	public Hand getDealerHand() {
 		return this.dealerHand;

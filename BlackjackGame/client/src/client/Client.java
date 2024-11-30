@@ -79,7 +79,13 @@ public class Client {
 			response = (Object) inputStream.readObject();
 			System.out.println("\n Response : " + response);
 
-			
+			// Maintain server connection - will need to attach to a user instance to keep open
+			while (true) {
+				AbstractMessage message = (AbstractMessage) inputStream.readObject();
+				Object msgResponse = message.execute();
+				
+				System.out.println("msgResponse: " + msgResponse.toString());
+			}
 			
 			
 			

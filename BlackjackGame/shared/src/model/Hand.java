@@ -1,8 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Hand {
+public class Hand implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Card> hand;
 	private int bet;
 	private boolean isSplit = false;
@@ -83,9 +85,7 @@ public class Hand {
 	public int getBet() {
 		return this.bet;
 	}
-	public void setBet(int bet) {
-		this.bet = bet;
-	}
+
 	public boolean getIsSplit() {
 		return this.isSplit;
 	}
