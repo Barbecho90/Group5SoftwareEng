@@ -1,9 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 import model.Card.CardRank;
 import model.Card.CardSuit;
 
-public class Card {
+public class Card implements Serializable{
+	private static final long serialVersionUID = 1L;
 
 	public enum CardSuit {
 		Spades, Hearts, Clubs, Diamonds;

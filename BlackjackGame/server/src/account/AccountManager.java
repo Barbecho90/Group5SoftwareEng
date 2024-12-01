@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import model.Account;
+import model.Dealer;
+import model.Player;
 import model.ROLE;
 
 public class AccountManager {
@@ -86,6 +88,34 @@ public class AccountManager {
 	public Account getAccount(String username) {
 		return accounts.get(username);
 	}
+	
+	public Dealer getDealer(String username) {
+		Account account = accounts.get(username);
+		
+		if (account == null) {
+			return null;
+		}
+		
+		if(isDealer(account)) {
+			return (Dealer) account.getUser();
+		}
+		
+		return null;
+	}
+	
+	public Player getPlayer(String username) {
+		Account account = accounts.get(username);
+		
+		if (account == null) {
+			return null;
+		}
+		
+		if(isPlayer(account)) {
+			return (Player) account.getUser();
+		}
+		
+		return null;
+	}
 
 	private void saveAccounts() {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
@@ -97,5 +127,13 @@ public class AccountManager {
 		} catch (IOException e) {
 			System.err.println("Error saving accounts: " + e.getMessage());
 		}
+	}
+	
+	private boolean isPlayer(Account a) {
+		return a.getUser() instanceof Player;
+	}
+	
+	private boolean isDealer(Account a) {
+		return a.getUser() instanceof Dealer;
 	}
 }

@@ -1,7 +1,10 @@
 package model;
 
-public class Shoe {
+import java.io.Serializable;
 
+public class Shoe implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private Deck[] fourDecks = new Deck[4];
 	private Card[] shoe = new Card[208];
 	private int shoeIndex = -1;

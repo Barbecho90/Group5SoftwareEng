@@ -2,14 +2,21 @@ package client;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import clientModel.Table;
+import message.CreateTableMessage;
 import message.DepositMessage;
+import message.GetTablesMessage;
+import message.JoinTableMessage;
 import message.LoginMessage;
 import message.WithdrawMessage;
 import model.Account;
+import model.LobbyTable;
 import serverCommunicator.SendMessage;
 import state.StateManager;
 
@@ -28,6 +35,7 @@ public class ClientGui extends JFrame {
 	private DefaultListModel<String> tableListModel = new DefaultListModel<>(); // To store the list of Tables
 	
 	private LoginMessage loginMessage;
+	private LobbyTable selectedTable;
 
 	private static final String SERVER_ADDRESS = "192.168.0.71"; // Default
 	private static final int SERVER_PORT = 12345;
@@ -137,6 +145,16 @@ public class ClientGui extends JFrame {
 
 		// Close the current login frame
 		this.dispose();
+		
+		GetTablesMessage gtm = new GetTablesMessage();
+		List<LobbyTable> response = (List<LobbyTable>) SendMessage.getInstance().send(gtm);
+		
+		DefaultListModel<LobbyTable> listModel = new DefaultListModel<LobbyTable>();
+		
+		for (LobbyTable table: response) {
+			listModel.addElement(table);
+		}
+		
 		// Create a new JFrame for the main application
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int frameWidth = (int) (screenSize.width * 0.5);
@@ -150,7 +168,7 @@ public class ClientGui extends JFrame {
 		frame.setLocationRelativeTo(null); // center the frame on the screen
 
 		// Create a JList using the DefaultListModel
-		JList<String> jList = new JList<>(tableListModel);//TODO: recieve lobby object from server to create the list of tables.
+		JList<LobbyTable> jList = new JList<LobbyTable>(listModel);//TODO: recieve lobby object from server to create the list of tables.
 		jList.setFont(new Font("Arial", Font.PLAIN, 30));
 
 		// Add the JList wrapped in a JScrollPane to allow scrolling when items exceed
@@ -207,10 +225,10 @@ public class ClientGui extends JFrame {
 				if (!e.getValueIsAdjusting()) { // Check if the event is adjusting
 
 					// Get the selected item
-					String selectedItem = jList.getSelectedValue();
-
+					LobbyTable selectedItem = jList.getSelectedValue();
+					selectedTable = selectedItem;
 					// Enable button1 if an item is selected
-					button1.setEnabled(selectedItem != null);
+					button3.setEnabled(selectedItem != null);
 				}
 			}
 		});
@@ -220,7 +238,10 @@ public class ClientGui extends JFrame {
 		button2.addActionListener(e -> openWithdrawFrame());
 		button3.addActionListener(new ActionListener() {  //TODO: make a player join a table
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, "Pushed");
+				JoinTableMessage jtm = new JoinTableMessage(selectedTable.getTableId());
+				String tableId = (String) SendMessage.getInstance().send(jtm);
+				
+				JOptionPane.showMessageDialog(frame, "Pushed to join " + tableId);
 			}
 		});
 		
@@ -229,7 +250,7 @@ public class ClientGui extends JFrame {
 		// Make the frame visible
 		frame.setVisible(true);
 
-	}	
+	}
 
 	private void openDealerTableSelectionFrame() { //Placeholder TODO: Implement dealer view
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -438,7 +459,20 @@ public class ClientGui extends JFrame {
 	}
 
 	public void createTable() {
+		CreateTableMessage ctm = new CreateTableMessage();
 		
+		String resp = (String) SendMessage.getInstance().send(ctm);
+		
+		System.out.println(resp);
+		
+		if(resp == null) {
+			return;
+		}
+		
+		Table.getInstance().setTableId(resp);
+		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
+		
+		// TODO: Implement transition to dealer view
 	}
 	
 	public void disconnect() {

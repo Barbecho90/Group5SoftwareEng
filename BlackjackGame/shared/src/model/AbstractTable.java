@@ -1,9 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class AbstractTable {
-
+public abstract class AbstractTable implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	// Dealer class should initialize with a Table
 	static private int count = 0;
 	private String id;
@@ -13,7 +15,7 @@ public abstract class AbstractTable {
 	protected Dealer hostDealer;
 	private int minCardIndBeforeShuffle;
 	protected ArrayList<Player> players = new ArrayList<>();
-
+	
 	public AbstractTable(Dealer dealer) {
 
 		this.id = "T00" + (count++);
