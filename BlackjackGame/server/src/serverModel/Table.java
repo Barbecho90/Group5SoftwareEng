@@ -9,6 +9,7 @@ import model.Hand;
 import model.Player;
 
 public class Table extends AbstractTable {
+	private static final long serialVersionUID = 1L;
 	private GAME_STATE state;
 	
 	private List<Player> turnOrder;
