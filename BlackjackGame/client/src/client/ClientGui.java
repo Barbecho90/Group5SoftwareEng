@@ -33,6 +33,7 @@ public class ClientGui extends JFrame {
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private DefaultListModel<String> tableListModel = new DefaultListModel<>(); // To store the list of Tables
+	private DefaultListModel<String> playerListModel = new DefaultListModel<>(); // Need a GetPlayersMessage to fill list
 	
 	private LoginMessage loginMessage;
 	private LobbyTable selectedTable;
@@ -489,21 +490,44 @@ public class ClientGui extends JFrame {
 		JLabel welcomeLabel = new JLabel("Welcome to the Main Application!", JLabel.CENTER);
 		openGameFrame.add(welcomeLabel, BorderLayout.NORTH);
 		
+		/* TODO: Create a new class in message package which gets players to add into the playListModel<>
+		 * Use the player list to select player and use "Deal Card" properly
+		// Create a JList using the DefaultListModel
+		JList<String> jList = new JList<>(playerListModel);
+		jList.setFont(new Font("Arial", Font.PLAIN, 30));
+
+		// Add the JList wrapped in a JScrollPane to allow scrolling when items exceed
+		// the visible area
+		JScrollPane scrollPane = new JScrollPane(jList);
+
+		// Add the JScrollPane to the GridBagLayout
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.gridx = 0; // Column 0
+		gbc.gridy = 0; // Row 0
+		gbc.weightx = 1.0; // Fill the horizontal space
+		gbc.weighty = 1.0; // Fill the vertical space
+		gbc.fill = GridBagConstraints.BOTH;
+		gbc.insets = new Insets(20, 20, 20, 20); // Padding around components
+		openGameFrame.add(scrollPane, gbc); // Add JScrollPane to the frame
+		*/
+				
 		JPanel buttonPanel = new JPanel();
-		JButton button1 = new JButton("Deal Card");
-		JButton button2 = new JButton("Create Shoe");
-		JButton button3 = new JButton("Close Table");
+		JButton button1 = new JButton("Begin Game");
+		JButton button2 = new JButton("Deal Card");
+		JButton button3 = new JButton("Create Shoe");
+		JButton button4 = new JButton("Close Table");
 		
 		buttonPanel.add(button1);
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
+		buttonPanel.add(button4);
 		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
 		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
-//		TODO: Game screen for both player and dealer.
 	
-		button1.addActionListener(e -> dealerDealCard());
-		button2.addActionListener(e -> dealerCreateShoe(button1,button2));
-		button3.addActionListener(e -> closeTable());
+		button1.addActionListener(e -> dealerBeginGame());
+		button2.addActionListener(e -> dealerDealCard()); // TODO: Will utilize a player list to select the player and deal card to them
+		button3.addActionListener(e -> dealerCreateShoe(button2,button3));
+		button4.addActionListener(e -> closeTable());
 		
 		//Disable deal button until show is created
 		button1.setEnabled(false);
@@ -550,6 +574,11 @@ public class ClientGui extends JFrame {
 	
 	private void closeTable() {
 		// Requires to close instance of table associated with the dealer
+	}
+	
+	private void dealerBeginGame() {
+		// TODO: Call method from dealer class which automatically deals the starting cards to all players
+		// In the table. - The method is dealCards() to be called
 	}
 	
 	private void dealerDealCard() {
