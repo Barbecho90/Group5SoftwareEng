@@ -5,6 +5,10 @@ import java.io.ObjectOutputStream;
 
 import model.Account;
 
+/** 
+ * save the input and output for the GUI - maintains the connection
+ * with the server
+ */
 public class ClientConnection {
 	private ObjectOutputStream outputStream;
 	private ObjectInputStream inputStream;

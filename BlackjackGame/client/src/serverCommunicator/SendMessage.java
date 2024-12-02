@@ -6,6 +6,11 @@ import java.io.ObjectInputStream;
 import abstractMessages.AbstractMessage;
 import state.StateManager;
 
+/**
+ * Helper class to encapsulate the send message logic; { 
+ * take the message  ;  send the object via outputStream  ; write and flush and read on the object 
+ * coming back and return the object if there is not errors
+ */
 public class SendMessage {
 	private static SendMessage instance = null;
 	
