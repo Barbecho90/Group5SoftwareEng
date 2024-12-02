@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import model.Lobby;
-import model.Table;
+import model.AbstractTable;
 
 public class LobbyTest {
 	
@@ -25,7 +25,7 @@ public class LobbyTest {
 	@Test
 	public void TestTableList() {
 		
-		ArrayList<Table> tables = lobby.getTableList();
+		ArrayList<AbstractTable> tables = lobby.getTableList();
 		int tableSize = tables.size();
 		
 		assertEquals(0, tableSize);

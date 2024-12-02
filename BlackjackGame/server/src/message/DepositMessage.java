@@ -7,17 +7,18 @@ public class DepositMessage extends AbstractDeposit {
 
 	private static final long serialVersionUID = 1L;
 
+	//default constructor 
 	public DepositMessage() {
 
 	}
 
+	//Parameterized constructor
 	public DepositMessage(double amount) {
-		setAmount(amount);
+		setAmount(amount);   
 	}
 
 	@Override
 	public Object execute() {
-		// TODO Auto-generated method stub
 		System.out.println("User " + getUsername() + " deposit " );
 		return AccountManager.getInstance().deposit(getUsername(), getAmount());
 	}

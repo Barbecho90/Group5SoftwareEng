@@ -13,10 +13,10 @@ public class Account implements Serializable {
 
 	public Account(String username, String password, ROLE role) {
 		if (username == null || username.isEmpty()) {
-			throw new IllegalArgumentException("Username cannot be blank");
+			System.out.println("Username cannot be blank");
 		}
 		if (password == null || password.isEmpty()) {
-			throw new IllegalArgumentException("Password cannot be blank");
+			System.out.println("Password cannot be blank");
 
 		}
 
@@ -73,7 +73,8 @@ public class Account implements Serializable {
 
 	public void deposit(double amount) {
 		if (amount <= 0) {
-			throw new IllegalArgumentException("Deposits must be positive");
+			System.out.println("You cannot enter a negative number");
+			return;
 		}
 		balance += amount;
 	}
@@ -81,10 +82,12 @@ public class Account implements Serializable {
 	public void withdraw(double amount) {
 
 		if (amount <= 0) {
-			throw new IllegalArgumentException("Withdrawal must be positive");
+			System.out.println("You cannot enter a negative number");
+			return;	
 		}
 		if (amount > balance) {
-			throw new IllegalArgumentException("Insuficient balance");
+			System.out.println("Insuficient balance");
+			return;
 		}
 		balance -= amount;
 	}

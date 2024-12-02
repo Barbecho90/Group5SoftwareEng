@@ -7,9 +7,11 @@ public class LoginMessage extends AbstractLogin {
 
 	private static final long serialVersionUID = 1L;
 
+	//constructor for serialization or default initialization
 	public LoginMessage(){
 		
 	}
+	
 	
 	public LoginMessage (String usr, String pwd) {
 		username = usr;
@@ -19,8 +21,8 @@ public class LoginMessage extends AbstractLogin {
 	@Override
 	public Object execute() {
 		System.out.println("Login "+ username);
-		return "success";
-		//return AccountManager.getInstance().login(username, password);
+		
+		return AccountManager.getInstance().login(username, password);
 	}
 
 }

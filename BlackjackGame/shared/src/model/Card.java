@@ -1,25 +1,25 @@
 package model;
 
+import java.io.Serializable;
+
 import model.Card.CardRank;
 import model.Card.CardSuit;
 
-public class Card{
-	
-	public enum CardSuit{
-		Spades,
-		Hearts,
-		Clubs,
-		Diamonds;
+public class Card implements Serializable{
+	private static final long serialVersionUID = 1L;
+
+	public enum CardSuit {
+		Spades, Hearts, Clubs, Diamonds;
 	}
-	
-	public enum CardRank{
+
+	public enum CardRank {
 		Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King
 	}
 
 	private CardRank Rank;
 	private CardSuit Suit;
-	private int[] values = {-1, -1};
-	
+	private int[] values = { -1, -1 };
+
 	public Card(int suitInt, int rankInt) {
 		switch(suitInt) {
 			case 0: this.Suit = CardSuit.Spades; break;
@@ -49,28 +49,33 @@ public class Card{
 	public CardSuit getSuit() {
 		return Suit;
 	}
-	
-	public CardRank getRank(){
+
+	public CardRank getRank() {
 		return Rank;
 	}
-	
+
 	public int[] getValues() {
 		return this.values;
 	}
 
 	public int getNumericalValue() {
-	        return switch (this.Rank) {
-	        case Two -> 2;
-	        case Three -> 3;
-	        case Four -> 4;
-	        case Five -> 5;
-	        case Six -> 6;
-	        case Seven -> 7;
-	        case Eight -> 8;
-	        case Nine -> 9;
-	        case Ten, Jack, Queen, King -> 10;
-	        default -> 1;
-        };
-	
-}
+		return switch (this.Rank) {
+		case Two -> 2;
+		case Three -> 3;
+		case Four -> 4;
+		case Five -> 5;
+		case Six -> 6;
+		case Seven -> 7;
+		case Eight -> 8;
+		case Nine -> 9;
+		case Ten, Jack, Queen, King -> 10;
+		default -> 1;
+		};
+
+	}
+
+	@Override
+	public String toString() {
+		return this.Rank + " of " + this.Suit;
+	}
 }

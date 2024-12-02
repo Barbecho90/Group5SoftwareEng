@@ -3,11 +3,11 @@ package modelTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import model.Table;
+import model.AbstractTable;
 
 public class TableTest {
 	
-	Table table = new Table();
+	AbstractTable table = new AbstractTable();
 	
 	
 	//test construtor, getID(), getNumPlayers(), getMinBet()

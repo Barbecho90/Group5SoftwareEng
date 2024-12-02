@@ -2,11 +2,23 @@ package client;
 
 import java.io.*;
 import java.net.*;
+import java.util.List;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import clientModel.Table;
+import message.CreateTableMessage;
+import message.DepositMessage;
+import message.GetTablesMessage;
+import message.JoinTableMessage;
 import message.LoginMessage;
+import message.WithdrawMessage;
+import model.Account;
+import model.LobbyTable;
+import serverCommunicator.SendMessage;
+import state.StateManager;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,11 +27,15 @@ import java.awt.event.ActionListener;
 public class ClientGui extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField hostField;
-	private JTextField portField;
+	private JTextField portField; 
+	private JLabel balance;
 	private JTextArea responseArea;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private DefaultListModel<String> tableListModel = new DefaultListModel<>(); // To store the list of Tables
+	
+	private LoginMessage loginMessage;
+	private LobbyTable selectedTable;
 
 	private static final String SERVER_ADDRESS = "192.168.0.71"; // Default
 	private static final int SERVER_PORT = 12345;
@@ -74,25 +90,40 @@ public class ClientGui extends JFrame {
 		String username = usernameField.getText();
 		String password = new String(passwordField.getPassword());
 		
-		try (Socket socket = new Socket(host, port);
-				ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-				ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream())) {
+		try {
+			socket = new Socket(host, port);
+			ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
+			ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
+					
 			// Send Login Message
-			LoginMessage loginMessage = new LoginMessage(username, password);
+			loginMessage = new LoginMessage(username, password);
 			outputStream.writeObject(loginMessage);
 			outputStream.flush();
 
 			// Receive login response
-			Object loginResponse = inputStream.readObject();
+			Account loginResponse = (Account) inputStream.readObject();
 
 			// Check Server's response
-			if ("success".equals(loginResponse)) {
+			if (loginResponse != null) {
+				// Set Account for local use
+				StateManager.getInstance().setAccount(loginResponse);
+				
+				// Save connection state
+				StateManager.getInstance().getAccount().getUser().setSocket(socket);
+				StateManager.getInstance().getClient().setInputStream(inputStream);
+				StateManager.getInstance().getClient().setOutputStream(outputStream);
+				
+				// keep connection open
+				startListeningForServerMessages();
+				
 				JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 				// Close the current login frame
 				this.dispose();
-				// main frame after login and connect to server
-				//TODO: Check user's Role and open different pane based on role
-				openMainAppFrame();
+				if (loginMessage.username.contains("user")) {
+					openMainAppFrame();
+				} else if (loginMessage.username.contains("dealer")) {
+					openDealerTableSelectionFrame();
+				}
 
 			} else {
 				JOptionPane.showMessageDialog(this, "Login Failed: " + loginResponse, "Error",
@@ -108,12 +139,21 @@ public class ClientGui extends JFrame {
 		}
 
 	}
-
 	
 	private void openMainAppFrame() {
 
 		// Close the current login frame
 		this.dispose();
+		
+		GetTablesMessage gtm = new GetTablesMessage();
+		List<LobbyTable> response = (List<LobbyTable>) SendMessage.getInstance().send(gtm);
+		
+		DefaultListModel<LobbyTable> listModel = new DefaultListModel<LobbyTable>();
+		
+		for (LobbyTable table: response) {
+			listModel.addElement(table);
+		}
+		
 		// Create a new JFrame for the main application
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int frameWidth = (int) (screenSize.width * 0.5);
@@ -127,7 +167,7 @@ public class ClientGui extends JFrame {
 		frame.setLocationRelativeTo(null); // center the frame on the screen
 
 		// Create a JList using the DefaultListModel
-		JList<String> jList = new JList<>(tableListModel);//TODO: recieve lobby object from server to create the list of tables.
+		JList<LobbyTable> jList = new JList<LobbyTable>(listModel);//TODO: recieve lobby object from server to create the list of tables.
 		jList.setFont(new Font("Arial", Font.PLAIN, 30));
 
 		// Add the JList wrapped in a JScrollPane to allow scrolling when items exceed
@@ -153,6 +193,7 @@ public class ClientGui extends JFrame {
 		JButton button2 = new JButton("Withdraw Funds");
 		JButton button3 = new JButton("Join Table");
 		JButton button4 = new JButton("Disconnect");
+		balance = new JLabel("ACCOUNT BALANCE:$" + StateManager.getInstance().getAccount().getBalance());
 
 		
 		
@@ -160,6 +201,7 @@ public class ClientGui extends JFrame {
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
 		buttonPanel.add(button4);
+		buttonPanel.add(balance);
 
 		// Disable button until user selects from the list
 		button3.setEnabled(false);
@@ -182,10 +224,10 @@ public class ClientGui extends JFrame {
 				if (!e.getValueIsAdjusting()) { // Check if the event is adjusting
 
 					// Get the selected item
-					String selectedItem = jList.getSelectedValue();
-
+					LobbyTable selectedItem = jList.getSelectedValue();
+					selectedTable = selectedItem;
 					// Enable button1 if an item is selected
-					button1.setEnabled(selectedItem != null);
+					button3.setEnabled(selectedItem != null);
 				}
 			}
 		});
@@ -193,22 +235,13 @@ public class ClientGui extends JFrame {
 		//add action listeners
 		button1.addActionListener(e -> openDepositFrame());
 		button2.addActionListener(e -> openWithdrawFrame());
-		button3.addActionListener(new ActionListener() {  //TODO: make a player join a table
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, "Pushed");
-			}
-		});
-		
-		button4.addActionListener(new ActionListener() { //close the window
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
+		button3.addActionListener(e -> openGameFrame());
+		button4.addActionListener(e -> disconnect());
 		
 		// Make the frame visible
 		frame.setVisible(true);
 
-	}	
+	}
 
 	private void openDealerTableSelectionFrame() { //Placeholder TODO: Implement dealer view
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -281,36 +314,52 @@ public class ClientGui extends JFrame {
 				}
 			}
 		});
+		
+		button1.addActionListener(e -> joinTable());
+		button2.addActionListener(e -> createTable());
+		button3.addActionListener(e -> disconnect());
+		
+		frame.setVisible(true);
 	}
 	
-	private void openGameFrame() { //placeholder TODO: Implement Gameframe
+	private void openGameFrame() {
 		// Close the current login frame
 		this.dispose();
 		// Create a new JFrame for the main application
-		JFrame mainAppFrame = new JFrame("Group 5's Awesome Blackjack game");
-		mainAppFrame.setSize(400, 300);
-		mainAppFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainAppFrame.setLocationRelativeTo(null); // Center the window
+		JFrame openGameFrame = new JFrame("Group 5's Awesome Blackjack game");
+		openGameFrame.setSize(400, 300);
+		openGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		openGameFrame.setLocationRelativeTo(null); // Center the window
 
 		// Add components to the main application frame
-		mainAppFrame.setLayout(new BorderLayout());
+		openGameFrame.setLayout(new BorderLayout());
 		JLabel welcomeLabel = new JLabel("Welcome to the Main Application!", JLabel.CENTER);
-		mainAppFrame.add(welcomeLabel, BorderLayout.NORTH);
+		openGameFrame.add(welcomeLabel, BorderLayout.NORTH);
+		
 		JPanel buttonPanel = new JPanel();
-		JButton button1 = new JButton("Deposit Funds");
-		JButton button2 = new JButton("Withdraw Funds");
-		JButton button3 = new JButton("Join a Table");
-		JButton button4 = new JButton("Disconnect");
+		JButton button1 = new JButton("Call for Hit");
+		JButton button2 = new JButton("Call to Stand");
+		JButton button3 = new JButton("Double Down");
+		JButton button4 = new JButton("Split");
+		JButton button5 = new JButton("Leave Table");
+		
 		buttonPanel.add(button1);
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
 		buttonPanel.add(button4);
-		mainAppFrame.add(welcomeLabel, BorderLayout.CENTER);
-		mainAppFrame.add(buttonPanel, BorderLayout.CENTER);
+		buttonPanel.add(button5);
+		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
+		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
 //      TODO: Game screen for both player and dealer.
 	
+		button1.addActionListener(e -> openDepositFrame());
+		button2.addActionListener(e -> openWithdrawFrame());
+		button3.addActionListener(e -> openGameFrame());
+		button4.addActionListener(e -> openGameFrame());
+		button5.addActionListener(e -> openMainAppFrame());
+		
 		// Show the main application frame
-		mainAppFrame.setVisible(true);
+		openGameFrame.setVisible(true);
 		// dimensions according to the current screen size
 	}
 	
@@ -335,9 +384,22 @@ public class ClientGui extends JFrame {
 		submitDeposit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
-			JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+			
+			// Send Deposit message, get account balance as response and update local account
+			DepositMessage dposit = new DepositMessage(number);
+			Object resp = SendMessage.getInstance().send(dposit);
+			System.out.print("Deposit Made new balance = " + resp);
+			
+			if(resp != null) {
+				StateManager.getInstance().getAccount().setBalance((double) resp);
+				balance.setText("Account Balance: " + (double) resp);
+				JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+			} else {
+				JOptionPane.showMessageDialog(DepositFrame, "Error funds not deposited!");
+			}
+			
 			numberField.setText("");
-			openMainAppFrame();
+			DepositFrame.dispose();
 			}
 			
 		});
@@ -369,9 +431,21 @@ public class ClientGui extends JFrame {
 		submitWithdrawl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
-			JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdrawn");
+			
+			WithdrawMessage withdraw = new WithdrawMessage(number);
+			Object resp = SendMessage.getInstance().send(withdraw);
+			
+			if(resp != null) {
+				StateManager.getInstance().getAccount().setBalance((double) resp);
+				balance.setText("Account Balance: " + (double) resp);
+				JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
+			} else {
+				JOptionPane.showMessageDialog(WithdrawlFrame, "Error funds not withdraw!");
+			
+			}
+			
 			numberField.setText("");
-			openMainAppFrame();
+			WithdrawlFrame.dispose();
 			}
 		});
 		
@@ -380,6 +454,65 @@ public class ClientGui extends JFrame {
 		WithdrawlFrame.add(WithdrawlPanel);
 		WithdrawlFrame.setVisible(true);
 	}
+	
+	public void joinTable() {
+		
+	}
+
+	public void createTable() {
+		CreateTableMessage ctm = new CreateTableMessage();
+		
+		String resp = (String) SendMessage.getInstance().send(ctm);
+		
+		System.out.println(resp);
+		
+		if(resp == null) {
+			return;
+		}
+		
+		Table.getInstance().setTableId(resp);
+		
+		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
+		
+		// Close the current login frame
+		this.dispose();
+		// Create a new JFrame for the main application
+		JFrame openGameFrame = new JFrame("Group 5's Awesome Blackjack game");
+		openGameFrame.setSize(400, 300);
+		openGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		openGameFrame.setLocationRelativeTo(null); // Center the window
+
+		// Add components to the main application frame
+		openGameFrame.setLayout(new BorderLayout());
+		JLabel welcomeLabel = new JLabel("Welcome to the Main Application!", JLabel.CENTER);
+		openGameFrame.add(welcomeLabel, BorderLayout.NORTH);
+		
+		JPanel buttonPanel = new JPanel();
+		JButton button1 = new JButton("Deal Card");
+		JButton button2 = new JButton("Create Shoe");
+		JButton button3 = new JButton("Close Table");
+		
+		buttonPanel.add(button1);
+		buttonPanel.add(button2);
+		buttonPanel.add(button3);
+		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
+		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
+//		      TODO: Game screen for both player and dealer.
+	
+		button1.addActionListener(e -> openDepositFrame());
+		button2.addActionListener(e -> openWithdrawFrame());
+		button3.addActionListener(e -> closeTable());
+		
+		// Show the main application frame
+		openGameFrame.setVisible(true);
+		// dimensions according to the current screen size
+		// TODO: Implement transition to dealer view
+	}
+	
+	public void disconnect() {
+		System.exit(0);
+	}
+	
 	// Main method to launch the GUI
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
@@ -387,5 +520,26 @@ public class ClientGui extends JFrame {
 			clientGui.setVisible(true);
 		});
 	}
+	
+	private void closeTable() {
+		// Requires to close instance of table associated with the dealer
+	}
+	
+	private void startListeningForServerMessages() {
+	    new Thread(() -> {
+	    	// TODO: Add implementation of method listener here, this will be used when the server broadcasts messages to update clients on game state
+//	        try {
+//	            ObjectInputStream inputStream = StateManager.getInstance().getClient().getInputStream();
+	            while (true) {
+//	                Object message = inputStream.readObject();
+	                // Handle incoming messages
+//	                System.out.println("Received message: " + message);
+	            }
+//	        } catch (IOException | ClassNotFoundException e) {
+//	            System.err.println("Connection lost: " + e.getMessage());
+//	        }
+	    }).start();
+	}
+
 
 }

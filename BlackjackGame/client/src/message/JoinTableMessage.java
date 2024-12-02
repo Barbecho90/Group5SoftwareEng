@@ -1,26 +1,25 @@
 package message;
 
-import abstractMessages.AbstractWithdraw;
+import abstractMessages.AbstractJoinTableMessage;
 import state.StateManager;
 
-public class WithdrawMessage extends AbstractWithdraw {
+public class JoinTableMessage extends AbstractJoinTableMessage{
 
 	private static final long serialVersionUID = 1L;
 
-	public WithdrawMessage() {
+	public JoinTableMessage() {
 		this.setUsername(StateManager.getInstance().getAccount().getUsername());
 	}
 	
-	public WithdrawMessage(double amount) {
-		setAmount (amount);
+	public JoinTableMessage(String tableId) {
 		this.setUsername(StateManager.getInstance().getAccount().getUsername());
+		this.setTableId(tableId);
 	}
 	
 	@Override
 	public Object execute() {
-		// TODO Auto-generated method stub
+		// No Execute on client side
 		return null;
 	}
-	
 
 }

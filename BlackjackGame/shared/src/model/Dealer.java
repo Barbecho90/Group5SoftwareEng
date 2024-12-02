@@ -1,13 +1,16 @@
 package model;
 
-public class Dealer extends User {
+import java.io.Serializable;
+
+public class Dealer extends User implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private Card seenCard = null;
 	//private Card seenCard;
 	//private Card unseenCard;
 	private int count = 0;
 	private int id;
 	private Hand dealerHand;
-	private Table table = new Table();
+	private AbstractTable table;
 	private Lobby lobby; //get Lobby from server class
 	private Card card;
 	
@@ -106,15 +109,15 @@ public class Dealer extends User {
 				return null;
 	}*/
 	
-	/*public void setDealerHand(Hand dealerHand) {
+	public void setDealerHand(Hand dealerHand) {
 		this.dealerHand = dealerHand;
-	}*/
+	}
 	
 	public Hand getDealerHand() {
 		return this.dealerHand;
 	}
 
-	public Table getTable() {
+	public AbstractTable getTable() {
 		return this.table;
 	}
 

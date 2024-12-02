@@ -7,6 +7,11 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	AccountTest.class,
 	BalanceTest.class,
+	CardTest.class,
+	DealerTest.class,
+	HandTest.class,
+	LobbyTest.class,
+	TableTest.class,
 	//Add more jUni test format  test.class,
 					
 })
