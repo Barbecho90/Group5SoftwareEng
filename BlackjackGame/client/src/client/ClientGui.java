@@ -27,7 +27,7 @@ import java.awt.event.ActionListener;
 public class ClientGui extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField hostField;
-	private JTextField portField;
+	private JTextField portField; 
 	private JLabel balance;
 	private JTextArea responseArea;
 	private JTextField usernameField;
@@ -139,7 +139,6 @@ public class ClientGui extends JFrame {
 		}
 
 	}
-
 	
 	private void openMainAppFrame() {
 
@@ -236,15 +235,7 @@ public class ClientGui extends JFrame {
 		//add action listeners
 		button1.addActionListener(e -> openDepositFrame());
 		button2.addActionListener(e -> openWithdrawFrame());
-		button3.addActionListener(new ActionListener() {  //TODO: make a player join a table
-			public void actionPerformed(ActionEvent e) {
-				JoinTableMessage jtm = new JoinTableMessage(selectedTable.getTableId());
-				String tableId = (String) SendMessage.getInstance().send(jtm);
-				
-				JOptionPane.showMessageDialog(frame, "Pushed to join " + tableId);
-			}
-		});
-		
+		button3.addActionListener(e -> openGameFrame());
 		button4.addActionListener(e -> disconnect());
 		
 		// Make the frame visible
@@ -331,34 +322,44 @@ public class ClientGui extends JFrame {
 		frame.setVisible(true);
 	}
 	
-	private void openGameFrame() { //placeholder TODO: Implement Gameframe
+	private void openGameFrame() {
 		// Close the current login frame
 		this.dispose();
 		// Create a new JFrame for the main application
-		JFrame mainAppFrame = new JFrame("Group 5's Awesome Blackjack game");
-		mainAppFrame.setSize(400, 300);
-		mainAppFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainAppFrame.setLocationRelativeTo(null); // Center the window
+		JFrame openGameFrame = new JFrame("Group 5's Awesome Blackjack game");
+		openGameFrame.setSize(400, 300);
+		openGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		openGameFrame.setLocationRelativeTo(null); // Center the window
 
 		// Add components to the main application frame
-		mainAppFrame.setLayout(new BorderLayout());
+		openGameFrame.setLayout(new BorderLayout());
 		JLabel welcomeLabel = new JLabel("Welcome to the Main Application!", JLabel.CENTER);
-		mainAppFrame.add(welcomeLabel, BorderLayout.NORTH);
+		openGameFrame.add(welcomeLabel, BorderLayout.NORTH);
+		
 		JPanel buttonPanel = new JPanel();
-		JButton button1 = new JButton("Deposit Funds");
-		JButton button2 = new JButton("Withdraw Funds");
-		JButton button3 = new JButton("Join a Table");
-		JButton button4 = new JButton("Disconnect");
+		JButton button1 = new JButton("Call for Hit");
+		JButton button2 = new JButton("Call to Stand");
+		JButton button3 = new JButton("Double Down");
+		JButton button4 = new JButton("Split");
+		JButton button5 = new JButton("Leave Table");
+		
 		buttonPanel.add(button1);
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
 		buttonPanel.add(button4);
-		mainAppFrame.add(welcomeLabel, BorderLayout.CENTER);
-		mainAppFrame.add(buttonPanel, BorderLayout.CENTER);
+		buttonPanel.add(button5);
+		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
+		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
 //      TODO: Game screen for both player and dealer.
 	
+		button1.addActionListener(e -> openDepositFrame());
+		button2.addActionListener(e -> openWithdrawFrame());
+		button3.addActionListener(e -> openGameFrame());
+		button4.addActionListener(e -> openGameFrame());
+		button5.addActionListener(e -> openMainAppFrame());
+		
 		// Show the main application frame
-		mainAppFrame.setVisible(true);
+		openGameFrame.setVisible(true);
 		// dimensions according to the current screen size
 	}
 	
@@ -470,8 +471,41 @@ public class ClientGui extends JFrame {
 		}
 		
 		Table.getInstance().setTableId(resp);
+		
 		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
 		
+		// Close the current login frame
+		this.dispose();
+		// Create a new JFrame for the main application
+		JFrame openGameFrame = new JFrame("Group 5's Awesome Blackjack game");
+		openGameFrame.setSize(400, 300);
+		openGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		openGameFrame.setLocationRelativeTo(null); // Center the window
+
+		// Add components to the main application frame
+		openGameFrame.setLayout(new BorderLayout());
+		JLabel welcomeLabel = new JLabel("Welcome to the Main Application!", JLabel.CENTER);
+		openGameFrame.add(welcomeLabel, BorderLayout.NORTH);
+		
+		JPanel buttonPanel = new JPanel();
+		JButton button1 = new JButton("Deal Card");
+		JButton button2 = new JButton("Create Shoe");
+		JButton button3 = new JButton("Close Table");
+		
+		buttonPanel.add(button1);
+		buttonPanel.add(button2);
+		buttonPanel.add(button3);
+		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
+		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
+//		      TODO: Game screen for both player and dealer.
+	
+		button1.addActionListener(e -> openDepositFrame());
+		button2.addActionListener(e -> openWithdrawFrame());
+		button3.addActionListener(e -> closeTable());
+		
+		// Show the main application frame
+		openGameFrame.setVisible(true);
+		// dimensions according to the current screen size
 		// TODO: Implement transition to dealer view
 	}
 	
@@ -485,6 +519,10 @@ public class ClientGui extends JFrame {
 			ClientGui clientGui = new ClientGui();
 			clientGui.setVisible(true);
 		});
+	}
+	
+	private void closeTable() {
+		// Requires to close instance of table associated with the dealer
 	}
 	
 	private void startListeningForServerMessages() {
