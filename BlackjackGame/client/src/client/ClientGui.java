@@ -352,15 +352,17 @@ public class ClientGui extends JFrame {
 		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
 //      TODO: Game screen for both player and dealer.
 	
-		button1.addActionListener(e -> openDepositFrame());
-		button2.addActionListener(e -> openWithdrawFrame());
-		button3.addActionListener(e -> openGameFrame());
-		button4.addActionListener(e -> openGameFrame());
-		button5.addActionListener(e -> openMainAppFrame());
+		button1.addActionListener(e -> playerHit());
+		button2.addActionListener(e -> playerStand());
+		button3.addActionListener(e -> playerDoubleDown());
+		button4.addActionListener(e -> playerSplit());
+		button5.addActionListener(e -> playerLeaveTable());//
 		
 		// Show the main application frame
 		openGameFrame.setVisible(true);
 		// dimensions according to the current screen size
+		//TODO: Display Player's hand
+		//TODO: Display dealers's hand
 	}
 	
 	private void openDepositFrame() {
@@ -497,20 +499,45 @@ public class ClientGui extends JFrame {
 		buttonPanel.add(button3);
 		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
 		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
-//		      TODO: Game screen for both player and dealer.
+//		TODO: Game screen for both player and dealer.
 	
-		button1.addActionListener(e -> openDepositFrame());
-		button2.addActionListener(e -> openWithdrawFrame());
+		button1.addActionListener(e -> dealerDealCard());
+		button2.addActionListener(e -> dealerCreateShoe(button1,button2));
 		button3.addActionListener(e -> closeTable());
+		
+		//Disable deal button until show is created
+		button1.setEnabled(false);
 		
 		// Show the main application frame
 		openGameFrame.setVisible(true);
 		// dimensions according to the current screen size
 		// TODO: Implement transition to dealer view
+		// TODO: Show Dealer's Hand;
 	}
 	
 	public void disconnect() {
 		System.exit(0);
+	}
+	
+	private void playerHit() {
+		//TODO: Send hit Message to server
+	}
+	
+	private void playerStand() {
+		//TODO: Send stand message to server
+	}
+	
+	private void playerDoubleDown() {
+		//TODO: send double down message to server
+	}
+	
+	private void playerSplit() {
+		//TODO: send split message to server
+	}
+	
+	private void playerLeaveTable() {
+		//TODO: send leave table message to server
+		openMainAppFrame();
 	}
 	
 	// Main method to launch the GUI
@@ -524,6 +551,19 @@ public class ClientGui extends JFrame {
 	private void closeTable() {
 		// Requires to close instance of table associated with the dealer
 	}
+	
+	private void dealerDealCard() {
+		//TODO: send message to server to deal player's hand
+	}
+	
+	private void dealerCreateShoe(JButton dealCard,JButton createShoe) {
+		//Enable deal card button and disable create show button
+		dealCard.setEnabled(true);
+		createShoe.setEnabled(false);
+		
+		//TODO: send message to server to create show for the table
+	}
+	
 	
 	private void startListeningForServerMessages() {
 	    new Thread(() -> {
