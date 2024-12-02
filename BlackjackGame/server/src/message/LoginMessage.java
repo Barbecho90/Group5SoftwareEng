@@ -7,9 +7,11 @@ public class LoginMessage extends AbstractLogin {
 
 	private static final long serialVersionUID = 1L;
 
+	//constructor for serialization or default initialization
 	public LoginMessage(){
 		
 	}
+	
 	
 	public LoginMessage (String usr, String pwd) {
 		username = usr;
