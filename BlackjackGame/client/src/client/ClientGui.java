@@ -17,8 +17,6 @@ import message.LoginMessage;
 import message.WithdrawMessage;
 import model.Account;
 import model.LobbyTable;
-import model.ROLE;
-import model.User;
 import serverCommunicator.SendMessage;
 import state.StateManager;
 
@@ -39,7 +37,6 @@ public class ClientGui extends JFrame {
 	
 	private LoginMessage loginMessage;
 	private LobbyTable selectedTable;
-	private Account account;
 
 	private static final String SERVER_ADDRESS = "192.168.0.71"; // Default
 	private static final int SERVER_PORT = 12345;
@@ -124,10 +121,8 @@ public class ClientGui extends JFrame {
 				// Close the current login frame
 				this.dispose();
 				if (loginMessage.username.contains("user")) {
-					this.account = new Account(username, password, ROLE.PLAYER);
 					openMainAppFrame();
 				} else if (loginMessage.username.contains("dealer")) {
-					this.account = new Account(username, password, ROLE.DEALER);
 					openDealerTableSelectionFrame();
 				}
 
