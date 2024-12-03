@@ -747,7 +747,9 @@ public class ClientGui extends JFrame {
 	}
 	
 	private void closeTable() {
-		openMainAppFrame();
+
+		openDealerTableSelectionFrame();
+
 		// Requires to close instance of table associated with the dealer
 	}
 	
