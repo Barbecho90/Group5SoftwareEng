@@ -45,6 +45,9 @@ This is what the server project looks like:
 
 Be sure that your project is able to build before starting to code.
 
+For the JUnit testing, ensure that share/test package is added to the Java Build Path. You can do this by right clicking the project --> click properties --> click Java Build Path --> select the source tab --> click Add Folder --> select the shared/test folder.
+
+*** 
 **3. Local Development**
 
 When developing locally you will need to chackout a branch in order to commit your code, to do this in terminal
