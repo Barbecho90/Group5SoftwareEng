@@ -24,7 +24,7 @@ public class Player extends User implements Serializable {
 
 		}
 		this.account = account;
-		this.id = ++count;
+		this.id = count++;
 		this.hands = new ArrayList<Hand>();
 		this.playerHand = new Hand();
 		this.playerSplitHand = new Hand();
