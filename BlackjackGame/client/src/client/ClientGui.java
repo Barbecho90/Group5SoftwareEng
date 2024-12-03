@@ -394,6 +394,7 @@ public class ClientGui extends JFrame {
 		DepositPanel.setLayout(new GridLayout(8, 1, 1, 10));
 		
 		JButton submitDeposit = new JButton("Deposit");
+		JButton cancelDeposit = new JButton("Cancel");
 		
 		JTextField numberField = new JTextField(20);
 		
@@ -422,6 +423,7 @@ public class ClientGui extends JFrame {
 		
 		DepositPanel.add(numberField);
 		DepositPanel.add(submitDeposit);
+		DepositPanel.add(cancelDeposit);
 		DepositFrame.add(DepositPanel);
 		DepositFrame.setVisible(true);
 	}
