@@ -401,7 +401,7 @@ public class ClientGui extends JFrame {
 		DepositPanel.setLayout(new GridLayout(8, 1, 1, 10));
 		
 		JButton submitDeposit = new JButton("Deposit");
-		JButton cancelDeposit = new JButton("Cancel");
+		JButton cancelDeposit = new JButton("Back");
 		
 		JTextField numberField = new JTextField(20);
 		
@@ -465,7 +465,7 @@ public class ClientGui extends JFrame {
 		JTextField numberField = new JTextField(20);
 		
 		JButton submitWithdrawl = new JButton("Withdrawl");
-		JButton cancelWithdrawl = new JButton("Cancel");
+		JButton cancelWithdrawl = new JButton("Back");
 		
 		//Withdrawl button
 		submitWithdrawl.addActionListener(new ActionListener() {
