@@ -22,8 +22,7 @@ public class HandTest {
 		
 		assertEquals(hand.getHand().get(0), shoe.getShoe()[0]);
 		assertEquals(hand.getHand().get(1), shoe.getShoe()[1]);
-		assertEquals(hand.getHandValue(), shoe.getShoe()[0].getValues()[0]
-										+ shoe.getShoe()[1].getValues()[0]);
+		assertEquals(hand.getHandValue(), shoe.getShoe()[0].getValues()[0] + shoe.getShoe()[1].getValues()[0]);
 		assertEquals(hand.getBet(), 10);
 	}
 	

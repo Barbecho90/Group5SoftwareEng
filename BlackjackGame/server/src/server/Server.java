@@ -81,6 +81,7 @@ public class Server {
 						outputStream.writeObject(account);
 						outputStream.flush();
 					}
+					
 				}
 
 			} catch (EOFException e) {
