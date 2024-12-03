@@ -398,6 +398,7 @@ public class ClientGui extends JFrame {
 		
 		JTextField numberField = new JTextField(20);
 		
+		//Deposit button
 		submitDeposit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
@@ -419,6 +420,14 @@ public class ClientGui extends JFrame {
 			DepositFrame.dispose();
 			}
 			
+		});
+		
+		//Cancel button
+		cancelDeposit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				numberField.setText("");
+				DepositFrame.dispose();
+			}
 		});
 		
 		DepositPanel.add(numberField);
