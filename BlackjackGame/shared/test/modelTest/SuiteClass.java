@@ -13,6 +13,7 @@ import org.junit.runners.Suite;
 	LobbyTest.class,
 	LobbyTableTest.class,
 	PlayerTest.class
+	TableTest.class,
 	//Add more jUni test format  test.class,
 					
 })
