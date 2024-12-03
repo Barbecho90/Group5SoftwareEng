@@ -12,6 +12,7 @@ import org.junit.runners.Suite;
 	HandTest.class,
 	LobbyTest.class,
 	LobbyTableTest.class,
+	TableTest.class,
 	//Add more jUni test format  test.class,
 					
 })
