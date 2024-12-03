@@ -130,5 +130,6 @@ public abstract class AbstractTable implements Serializable{
 				.append(", Number of Players: ").append(this.numPlayers); // Assuming getName() exists in Dealer class
 		return tableInfo.toString();
 	}
+	
 
 }

@@ -567,7 +567,7 @@ public class ClientGui extends JFrame {
 	    openGameFrame.add(centerPanel, gbc);
 
 	    // Current player label at the top right
-	    JLabel currPlayer = new JLabel("Current: User 1", JLabel.CENTER);
+	    JLabel currPlayer = new JLabel("	", JLabel.CENTER);
 	    gbc.gridx = 1; // Right column
 	    gbc.gridy = 0; // Top row
 	    gbc.weighty = 0; // Reset vertical stretch
@@ -595,7 +595,7 @@ public class ClientGui extends JFrame {
 		
 		joinTable();
 		
-//		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
+		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
 //		
 //		// Close the current login frame
 //		this.dispose();
@@ -694,6 +694,7 @@ public class ClientGui extends JFrame {
 	
 	private void closeTable() {
 		// Requires to close instance of table associated with the dealer
+		this.dispose();
 	}
 	
 	private void dealerBeginGame() {
