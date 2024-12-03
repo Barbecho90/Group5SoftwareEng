@@ -443,30 +443,49 @@ public class ClientGui extends JFrame {
 		JTextField numberField = new JTextField(20);
 		
 		JButton submitWithdrawl = new JButton("Withdrawl");
+		JButton cancelWithdrawl = new JButton("Cancel");
 		
+		//Withdrawl button
 		submitWithdrawl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
 			
-			WithdrawMessage withdraw = new WithdrawMessage(number);
-			Object resp = SendMessage.getInstance().send(withdraw);
-			
-			if(resp != null) {
-				StateManager.getInstance().getAccount().setBalance((double) resp);
-				balance.setText("Account Balance: " + (double) resp);
-				JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
-			} else {
-				JOptionPane.showMessageDialog(WithdrawlFrame, "Error funds not withdraw!");
-			
-			}
-			
-			numberField.setText("");
-			WithdrawlFrame.dispose();
+				if (number <= 0) {
+					JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Invalid amount entered!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else if (number > StateManager.getInstance().getAccount().getBalance()) {
+					JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Insufficient funds!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					WithdrawMessage withdraw = new WithdrawMessage(number);
+					Object resp = SendMessage.getInstance().send(withdraw);
+					
+					if(resp != null) {
+						StateManager.getInstance().getAccount().setBalance((double) resp);
+						balance.setText("Account Balance: " + (double) resp);
+						JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
+					} else {
+						JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Funds not withdraw!", "Error", JOptionPane.ERROR_MESSAGE);
+					
+					}
+					
+					numberField.setText("");
+					WithdrawlFrame.dispose();
+					}
+				}
+		});
+		
+		//Cancel button
+		cancelWithdrawl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				numberField.setText("");
+				WithdrawlFrame.dispose();
 			}
 		});
 		
 		WithdrawlPanel.add(numberField);
 		WithdrawlPanel.add(submitWithdrawl);
+		WithdrawlPanel.add(cancelWithdrawl);
 		WithdrawlFrame.add(WithdrawlPanel);
 		WithdrawlFrame.setVisible(true);
 	}
