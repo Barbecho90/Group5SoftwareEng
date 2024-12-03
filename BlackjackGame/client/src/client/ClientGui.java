@@ -15,8 +15,12 @@ import message.GetTablesMessage;
 import message.JoinTableMessage;
 import message.LoginMessage;
 import message.WithdrawMessage;
+import model.AbstractTable;
 import model.Account;
+import model.Dealer;
 import model.LobbyTable;
+import model.Player;
+import model.ROLE;
 import serverCommunicator.SendMessage;
 import state.StateManager;
 
@@ -37,6 +41,10 @@ public class ClientGui extends JFrame {
 	
 	private LoginMessage loginMessage;
 	private LobbyTable selectedTable;
+	private Account account;
+	private ROLE role;
+	private Dealer dealer;
+	private Player player;
 
 	private static final String SERVER_ADDRESS = "192.168.0.71"; // Default
 	private static final int SERVER_PORT = 12345;
@@ -102,12 +110,12 @@ public class ClientGui extends JFrame {
 			outputStream.flush();
 
 			// Receive login response
-			Account loginResponse = (Account) inputStream.readObject();
+			account = (Account) inputStream.readObject();
 
 			// Check Server's response
-			if (loginResponse != null) {
+			if (account != null) {
 				// Set Account for local use
-				StateManager.getInstance().setAccount(loginResponse);
+				StateManager.getInstance().setAccount(account);
 				
 				// Save connection state
 				StateManager.getInstance().getAccount().getUser().setSocket(socket);
@@ -120,14 +128,17 @@ public class ClientGui extends JFrame {
 				JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 				// Close the current login frame
 				this.dispose();
+				//set player or dealer
 				if (loginMessage.username.contains("user")) {
+					player = new Player(account);
 					openMainAppFrame();
 				} else if (loginMessage.username.contains("dealer")) {
+					dealer = new Dealer();//TODO: set lobby and min bet arguments
 					openDealerTableSelectionFrame();
 				}
 
 			} else {
-				JOptionPane.showMessageDialog(this, "Login Failed: " + loginResponse, "Error",
+				JOptionPane.showMessageDialog(this, "Login Failed: " + account, "Error",
 						JOptionPane.ERROR_MESSAGE);
 
 			}
@@ -152,7 +163,9 @@ public class ClientGui extends JFrame {
 		DefaultListModel<LobbyTable> listModel = new DefaultListModel<LobbyTable>();
 		
 		for (LobbyTable table: response) {
+			
 			listModel.addElement(table);
+			
 		}
 		
 		// Create a new JFrame for the main application
