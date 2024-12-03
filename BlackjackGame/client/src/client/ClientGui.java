@@ -236,7 +236,7 @@ public class ClientGui extends JFrame {
 		//add action listeners
 		button1.addActionListener(e -> openDepositFrame());
 		button2.addActionListener(e -> openWithdrawFrame());
-		button3.addActionListener(e -> openGameFrame());
+		button3.addActionListener(e -> joinTable());
 		button4.addActionListener(e -> disconnect());
 		
 		// Make the frame visible
@@ -459,8 +459,126 @@ public class ClientGui extends JFrame {
 	}
 	
 	public void joinTable() {
+	    // Close the current login frame
+	    this.dispose();
+
+	    // Create the main application frame
+	    JFrame openGameFrame = new JFrame("Group 5's Awesome Blackjack Game");
+	    openGameFrame.setSize(800, 600); // Adjusted size
+	    openGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    openGameFrame.setLocationRelativeTo(null); // Center the frame
+	    openGameFrame.setLayout(new GridBagLayout());
+	    GridBagConstraints gbc = new GridBagConstraints();
+
+	    // Add welcome label at the top
+	    JLabel welcomeLabel = new JLabel("Welcome to the Blackjack Game!", JLabel.CENTER);
+	    gbc.gridx = 0;
+	    gbc.gridy = 0;
+	    gbc.gridwidth = 2; // Spans across two columns
+	    gbc.insets = new Insets(10, 10, 10, 10); // Add padding
+	    gbc.anchor = GridBagConstraints.CENTER;
+	    openGameFrame.add(welcomeLabel, gbc);
+	    
+	 // Center area: Dealer and User seats
+	    JPanel centerPanel = new JPanel();
+	    centerPanel.setLayout(new GridLayout(2, 1, 10, 10)); // Two rows: Dealer at the top, Users at the bottom
+
+	    // Dealer seat
+	    JPanel dealerSeat = new JPanel();
+	    dealerSeat.setLayout(new FlowLayout());
+	    JLabel dealerLabel = new JLabel("Dealer", JLabel.CENTER);
+	    dealerSeat.add(dealerLabel);
+	    
+
+	    // User seats
+	    JPanel userSeatPanel = new JPanel();
+	    userSeatPanel.setLayout(new GridLayout(1, 6, 10, 10)); // Six user seats horizontally
+	    for (int i = 0; i < 6; i++) {
+	        JLabel userLabel = new JLabel("User " + (i + 1), JLabel.CENTER);
+	        userSeatPanel.add(userLabel);
+	    }
+	    
+
+	    // Right panel: Action buttons
+	    //dealer
+	    JButton button1 = new JButton("Begin Game");
+		JButton button2 = new JButton("Deal Card");
+		JButton button3 = new JButton("Create Shoe");
+		JButton button5 = new JButton("Collect Money");
+		JButton button4 = new JButton("Close Table");
 		
+		button1.addActionListener(e -> dealerBeginGame());
+		button2.addActionListener(e -> dealerDealCard()); // TODO: Will utilize a player list to select the player and deal card to them
+		button3.addActionListener(e -> dealerCreateShoe(button2,button3));
+		//button5.addActionListener(e -> collectMoney());
+		button4.addActionListener(e -> closeTable());
+		
+		//user
+		JButton butt1 = new JButton("Call to Hit");
+		JButton butt2 = new JButton("Call to Stand");
+		JButton butt3 = new JButton("Double Down");
+		JButton butt4 = new JButton("Split");
+		JButton butt5 = new JButton("Leave Table");
+		
+		butt1.addActionListener(e -> playerHit());
+		butt2.addActionListener(e -> playerStand());
+		butt3.addActionListener(e -> playerDoubleDown());
+		butt4.addActionListener(e -> playerSplit());
+		butt5.addActionListener(e -> playerLeaveTable());
+		
+	    JPanel buttonPanel = new JPanel();
+	    buttonPanel.setLayout(new GridLayout(6, 1, 10, 10)); // Six buttons with spacing
+	    if (loginMessage.username.contains("user")) {//USER VIEW
+	    	buttonPanel.add(butt1);
+			buttonPanel.add(butt2);
+			buttonPanel.add(butt3);
+			buttonPanel.add(butt4);
+			buttonPanel.add(butt5);
+			dealerSeat.setBackground(Color.LIGHT_GRAY);
+			//dealer above users
+			centerPanel.add(dealerSeat);
+			centerPanel.add(userSeatPanel);
+			
+	    } else if (loginMessage.username.contains("dealer")) {//DEALER VIEW
+	    	buttonPanel.add(button1);
+			buttonPanel.add(button2);
+			buttonPanel.add(button3);
+			buttonPanel.add(button5);
+			buttonPanel.add(button4);
+			userSeatPanel.setBackground(Color.LIGHT_GRAY);
+			//users above dealer
+			centerPanel.add(userSeatPanel);
+			centerPanel.add(dealerSeat);
+	    }
+	    gbc.gridx = 1; // Right column
+	    gbc.gridy = 1; // Same center row
+	    gbc.weightx = 0; // Do not stretch horizontally
+	    gbc.fill = GridBagConstraints.VERTICAL; // Fill vertically
+	    openGameFrame.add(buttonPanel, gbc);//add center panel to the game frame
+	    
+	 
+
+	    gbc.gridx = 0; // Left column
+	    gbc.gridy = 1; // Center row
+	    gbc.gridwidth = 1; // Single column for center panel
+	    gbc.weightx = 1; // Stretch horizontally
+	    gbc.weighty = 1; // Stretch vertically
+	    gbc.fill = GridBagConstraints.BOTH; // Fill both directions
+	    openGameFrame.add(centerPanel, gbc);
+
+	    // Current player label at the top right
+	    JLabel currPlayer = new JLabel("Current: User 1", JLabel.CENTER);
+	    gbc.gridx = 1; // Right column
+	    gbc.gridy = 0; // Top row
+	    gbc.weighty = 0; // Reset vertical stretch
+	    gbc.fill = GridBagConstraints.HORIZONTAL;
+	    gbc.insets = new Insets(5, 5, 5, 5);
+	    openGameFrame.add(currPlayer, gbc);
+
+	    // Show the main application frame
+	    openGameFrame.setVisible(true);
 	}
+
 
 	public void createTable() {
 		CreateTableMessage ctm = new CreateTableMessage();
@@ -475,68 +593,70 @@ public class ClientGui extends JFrame {
 		
 		Table.getInstance().setTableId(resp);
 		
-		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
+		joinTable();
 		
-		// Close the current login frame
-		this.dispose();
-		// Create a new JFrame for the main application
-		JFrame openGameFrame = new JFrame("Group 5's Awesome Blackjack game");
-		openGameFrame.setSize(400, 300);
-		openGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		openGameFrame.setLocationRelativeTo(null); // Center the window
-
-		// Add components to the main application frame
-		openGameFrame.setLayout(new BorderLayout());
-		JLabel welcomeLabel = new JLabel("Welcome to the Main Application!", JLabel.CENTER);
-		openGameFrame.add(welcomeLabel, BorderLayout.NORTH);
-		
-		/* TODO: Create a new class in message package which gets players to add into the playListModel<>
-		 * Use the player list to select player and use "Deal Card" properly
-		// Create a JList using the DefaultListModel
-		JList<String> jList = new JList<>(playerListModel);
-		jList.setFont(new Font("Arial", Font.PLAIN, 30));
-
-		// Add the JList wrapped in a JScrollPane to allow scrolling when items exceed
-		// the visible area
-		JScrollPane scrollPane = new JScrollPane(jList);
-
-		// Add the JScrollPane to the GridBagLayout
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0; // Column 0
-		gbc.gridy = 0; // Row 0
-		gbc.weightx = 1.0; // Fill the horizontal space
-		gbc.weighty = 1.0; // Fill the vertical space
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.insets = new Insets(20, 20, 20, 20); // Padding around components
-		openGameFrame.add(scrollPane, gbc); // Add JScrollPane to the frame
-		*/
-				
-		JPanel buttonPanel = new JPanel();
-		JButton button1 = new JButton("Begin Game");
-		JButton button2 = new JButton("Deal Card");
-		JButton button3 = new JButton("Create Shoe");
-		JButton button4 = new JButton("Close Table");
-		
-		buttonPanel.add(button1);
-		buttonPanel.add(button2);
-		buttonPanel.add(button3);
-		buttonPanel.add(button4);
-		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
-		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
-	
-		button1.addActionListener(e -> dealerBeginGame());
-		button2.addActionListener(e -> dealerDealCard()); // TODO: Will utilize a player list to select the player and deal card to them
-		button3.addActionListener(e -> dealerCreateShoe(button2,button3));
-		button4.addActionListener(e -> closeTable());
-		
-		//Disable deal button until show is created
-		button1.setEnabled(false);
-		
-		// Show the main application frame
-		openGameFrame.setVisible(true);
-		// dimensions according to the current screen size
-		// TODO: Implement transition to dealer view
-		// TODO: Show Dealer's Hand;
+//		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
+//		
+//		// Close the current login frame
+//		this.dispose();
+//		// Create a new JFrame for the main application
+//		JFrame openGameFrame = new JFrame("Group 5's Awesome Blackjack game");
+//		openGameFrame.setSize(400, 300);
+//		openGameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		openGameFrame.setLocationRelativeTo(null); // Center the window
+//
+//		// Add components to the main application frame
+//		openGameFrame.setLayout(new BorderLayout());
+//		JLabel welcomeLabel = new JLabel("Welcome to the Main Application!", JLabel.CENTER);
+//		openGameFrame.add(welcomeLabel, BorderLayout.NORTH);
+//		
+//		/* TODO: Create a new class in message package which gets players to add into the playListModel<>
+//		 * Use the player list to select player and use "Deal Card" properly
+//		// Create a JList using the DefaultListModel
+//		JList<String> jList = new JList<>(playerListModel);
+//		jList.setFont(new Font("Arial", Font.PLAIN, 30));
+//
+//		// Add the JList wrapped in a JScrollPane to allow scrolling when items exceed
+//		// the visible area
+//		JScrollPane scrollPane = new JScrollPane(jList);
+//
+//		// Add the JScrollPane to the GridBagLayout
+//		GridBagConstraints gbc = new GridBagConstraints();
+//		gbc.gridx = 0; // Column 0
+//		gbc.gridy = 0; // Row 0
+//		gbc.weightx = 1.0; // Fill the horizontal space
+//		gbc.weighty = 1.0; // Fill the vertical space
+//		gbc.fill = GridBagConstraints.BOTH;
+//		gbc.insets = new Insets(20, 20, 20, 20); // Padding around components
+//		openGameFrame.add(scrollPane, gbc); // Add JScrollPane to the frame
+//		*/
+//				
+//		JPanel buttonPanel = new JPanel();
+//		JButton button1 = new JButton("Begin Game");
+//		JButton button2 = new JButton("Deal Card");
+//		JButton button3 = new JButton("Create Shoe");
+//		JButton button4 = new JButton("Close Table");
+//		
+//		buttonPanel.add(button1);
+//		buttonPanel.add(button2);
+//		buttonPanel.add(button3);
+//		buttonPanel.add(button4);
+//		openGameFrame.add(welcomeLabel, BorderLayout.CENTER);
+//		openGameFrame.add(buttonPanel, BorderLayout.CENTER);
+//	
+//		button1.addActionListener(e -> dealerBeginGame());
+//		button2.addActionListener(e -> dealerDealCard()); // TODO: Will utilize a player list to select the player and deal card to them
+//		button3.addActionListener(e -> dealerCreateShoe(button2,button3));
+//		button4.addActionListener(e -> closeTable());
+//		
+//		//Disable deal button until show is created
+//		button1.setEnabled(false);
+//		
+//		// Show the main application frame
+//		openGameFrame.setVisible(true);
+//		// dimensions according to the current screen size
+//		// TODO: Implement transition to dealer view
+//		// TODO: Show Dealer's Hand;
 	}
 	
 	public void disconnect() {
