@@ -57,7 +57,7 @@ public class ClientGui extends JFrame {
 		hostField = new JTextField("");
 		add(hostField);
 
-		// Port field
+		// Port field	
 		add(new JLabel("Port:"));
 		portField = new JTextField(String.valueOf(""));
 		add(portField);
@@ -567,7 +567,7 @@ public class ClientGui extends JFrame {
 	    openGameFrame.add(centerPanel, gbc);
 
 	    // Current player label at the top right
-	    JLabel currPlayer = new JLabel("	", JLabel.CENTER);
+	    JLabel currPlayer = new JLabel("Current:	" + StateManager.getInstance().getAccount().getUsername(), JLabel.CENTER);
 	    gbc.gridx = 1; // Right column
 	    gbc.gridy = 0; // Top row
 	    gbc.weighty = 0; // Reset vertical stretch
@@ -694,7 +694,7 @@ public class ClientGui extends JFrame {
 	
 	private void closeTable() {
 		// Requires to close instance of table associated with the dealer
-		this.dispose();
+		openMainAppFrame();
 	}
 	
 	private void dealerBeginGame() {
