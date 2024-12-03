@@ -36,7 +36,7 @@ public class Account implements Serializable {
 	}
 
 	// Getters
-
+	
 	public ROLE getRole() {
 		return role;
 	}

@@ -42,4 +42,9 @@ public class Shoe implements Serializable{
 	public int getNumCards() {
 		return this.numCards;
 	}
+	
+	public Card[] getShoe() {
+		return this.shoe;
+	}
+  
 }
