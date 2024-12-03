@@ -89,8 +89,15 @@ public class ClientGui extends JFrame {
 				e1.printStackTrace();
 			}
 		});
+		
+		// Cancel Button
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e -> {
+			dispose();
+		});
+		
 		add(connectButton);
-
+		add(cancelButton);
 	}
 
 	private void connectToServer() throws ClassNotFoundException {
