@@ -403,23 +403,27 @@ public class ClientGui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
 			
-			// Send Deposit message, get account balance as response and update local account
-			DepositMessage dposit = new DepositMessage(number);
-			Object resp = SendMessage.getInstance().send(dposit);
-			System.out.print("Deposit Made new balance = " + resp);
-			
-			if(resp != null) {
-				StateManager.getInstance().getAccount().setBalance((double) resp);
-				balance.setText("Account Balance: " + (double) resp);
-				JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+			if (number <= 0) {
+				JOptionPane.showMessageDialog(DepositFrame, "Error: Invalid amount entered!", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			} else {
-				JOptionPane.showMessageDialog(DepositFrame, "Error funds not deposited!");
+				// Send Deposit message, get account balance as response and update local account
+				DepositMessage dposit = new DepositMessage(number);
+				Object resp = SendMessage.getInstance().send(dposit);
+				System.out.print("Deposit Made new balance = " + resp);
+				
+				if(resp != null) {
+					StateManager.getInstance().getAccount().setBalance((double) resp);
+					balance.setText("Account Balance: " + (double) resp);
+					JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+				} else {
+					JOptionPane.showMessageDialog(DepositFrame, "Error funds not deposited!");
+				}
+				
+				numberField.setText("");
+				DepositFrame.dispose();
+				}	
 			}
-			
-			numberField.setText("");
-			DepositFrame.dispose();
-			}
-			
 		});
 		
 		//Cancel button
