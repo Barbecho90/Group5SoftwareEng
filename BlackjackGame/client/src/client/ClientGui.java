@@ -545,7 +545,7 @@ public class ClientGui extends JFrame {
 	    openGameFrame.add(centerPanel, gbc);
 
 	    // Current player label at the top right
-	    JLabel currPlayer = new JLabel("Current: User 1", JLabel.CENTER);
+	    JLabel currPlayer = new JLabel("Current: " + StateManager.getInstance().getAccount().getUsername(), JLabel.CENTER);
 	    gbc.gridx = 1; // Right column
 	    gbc.gridy = 0; // Top row
 	    gbc.weighty = 0; // Reset vertical stretch
