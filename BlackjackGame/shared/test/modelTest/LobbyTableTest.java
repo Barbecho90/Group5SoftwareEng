@@ -3,19 +3,19 @@ package modelTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import model.AbstractTable;
+import model.LobbyTable;
 
-public class TableTest {
+public class LobbyTableTest {
 	
-	AbstractTable table = new AbstractTable();
+	LobbyTable table = new LobbyTable("T000", 0, 2);
 	
 	
-	//test construtor, getID(), getNumPlayers(), getMinBet()
+	//test constructor, getID(), getNumPlayers(), getMinBet()
 	@Test
 	public void TestNewTable() {
 		
-		assertEquals(table.getId(), 0);
-		assertEquals(table.getNumPlayers(), 0);
+		assertEquals(table.getTableId(), "T000");
+		assertEquals(table.getPlayerCount(), 0);
 		assertEquals(table.getMinBet(), 2);
 		
 	}
@@ -23,10 +23,10 @@ public class TableTest {
 	
 	//tests if number of players updates when new player joins, newPlayer(), 
 	@Test
-	public void TestNewPlayer() {
+	public void TestSetPlayerCount() {
 		
-		table.newPlayer();
-		assertEquals(table.getNumPlayers(), 1);
+		table.setPlayerCount(3);
+		assertEquals(table.getPlayerCount(), 3);
 		
 	}
 

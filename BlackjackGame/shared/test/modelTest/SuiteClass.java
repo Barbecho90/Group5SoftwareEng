@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
 	DealerTest.class,
 	HandTest.class,
 	LobbyTest.class,
-	TableTest.class,
+	LobbyTableTest.class,
 	//Add more jUni test format  test.class,
 					
 })
