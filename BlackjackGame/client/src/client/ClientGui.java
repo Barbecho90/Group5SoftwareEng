@@ -573,10 +573,7 @@ public class ClientGui extends JFrame {
 	}
 	
 	private void closeTable() {
-<<<<<<< Updated upstream
-=======
 		openDealerTableSelectionFrame();
->>>>>>> Stashed changes
 		// Requires to close instance of table associated with the dealer
 	}
 	
