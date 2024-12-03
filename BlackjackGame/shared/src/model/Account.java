@@ -2,7 +2,9 @@ package model;
 
 import java.io.Serializable;
 
-public class Account implements Serializable {
+import observable.Observable;
+
+public class Account extends Observable implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String username;

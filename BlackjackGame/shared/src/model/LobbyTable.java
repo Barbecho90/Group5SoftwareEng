@@ -9,6 +9,8 @@ public class LobbyTable implements Serializable{
 	private int playerCount;
 	private int minBet;
 	
+	public LobbyTable() {}
+	
 	public LobbyTable(String tableId, int playerCount, int minBet) {
 		this.setTableId(tableId);
 		this.setPlayerCount(playerCount);

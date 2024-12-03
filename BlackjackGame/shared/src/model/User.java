@@ -1,17 +1,19 @@
 package model;
 
-import java.net.Socket;
+import java.io.ObjectOutputStream;
 
-public abstract class User {
-	private Socket userSocket;
+import observable.IObserver;
+
+public abstract class User implements IObserver{
+	private ObjectOutputStream outputStream;
 	
 	public abstract void login();
-	
-	public Socket getSocket() {
-		return userSocket;
+
+	public ObjectOutputStream getOutputStream() {
+		return outputStream;
 	}
-	
-	public void setSocket(Socket socket) {
-		userSocket = socket;
+
+	public void setOutputStream(ObjectOutputStream outputStream) {
+		this.outputStream = outputStream;
 	}
 }

@@ -3,7 +3,9 @@ package table;
 import java.util.ArrayList;
 import java.util.List;
 
+import message.BroadcastLobbyTabblesMessage;
 import model.Dealer;
+import model.Lobby;
 import model.LobbyTable;
 import model.Player;
 import serverModel.Table;
@@ -15,7 +17,6 @@ public class TableManager {
 
 	private TableManager() {
 		this.tables = new ArrayList<>();
-
 	}
 
 	public static TableManager getInstance() {
@@ -28,8 +29,27 @@ public class TableManager {
 	//Method that return table Id
 	public String createTable(Dealer dealer) {
 		AbstractTable table = new Table(dealer);
+		
 		tables.add(table);
+		
+		// Update the lobby
+		Lobby.getInstance().addNewTable(new LobbyTable(table.getId(), table.getNumPlayers(), table.getMinBet()));
+		System.out.println("New Table with Lobby");
+		System.out.println(Lobby.getInstance().getTableList());
+		Lobby.getInstance().broadcast(new BroadcastLobbyTabblesMessage(Lobby.getInstance().getTableList()));
+		
 		return table.getId();
+	}
+	
+	// Player Joins the lobby
+	public void playerJoinsLobby(Player player) {
+		Lobby.getInstance().addPlayerToLobby(player);
+		Lobby.getInstance().broadcast(new BroadcastLobbyTabblesMessage(Lobby.getInstance().getTableList()));
+	}
+	
+	public void dealerJoinsLobby(Dealer dealer) {
+		Lobby.getInstance().addDealerToLobby(dealer);
+		Lobby.getInstance().broadcast(new BroadcastLobbyTabblesMessage(Lobby.getInstance().getTableList()));
 	}
 
 	// list of table info
@@ -48,13 +68,7 @@ public class TableManager {
 	}
 	
 	public List<LobbyTable> getLobbyTables() {
-		ArrayList<LobbyTable> lobbyTables = new ArrayList<LobbyTable>();
-		
-		for (AbstractTable table: tables) {
-			lobbyTables.add(new LobbyTable(table.getId(), table.getNumPlayers(), table.getMinBet()));
-		}
-		
-		return lobbyTables;
+		return Lobby.getInstance().getTableList();
 	}
 
 	// return all active tables(open and not full)
@@ -109,4 +123,7 @@ public class TableManager {
 		return null;
 	}
 
+	public Lobby getLobby() {
+		return Lobby.getInstance();
+	}
 }

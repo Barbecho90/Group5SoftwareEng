@@ -4,10 +4,12 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import message.BroadcastBalanceMessage;
 import model.Account;
 import model.Dealer;
 import model.Player;
 import model.ROLE;
+import table.TableManager;
 
 public class AccountManager {
 	private Map<String, Account> accounts = new HashMap<>();
@@ -55,11 +57,14 @@ public class AccountManager {
 		this.isLoaded = true;
 	}
 
+	// On Login we will be added to the lobby, so we will be a lobby observer
 	public Account login(String username, String password) {
 		Account account = accounts.get(username);
 
 		// Check credentials
 		if (account != null && account.getPassword().equals(password)) {
+			account.register(account.getUser());
+			TableManager.getInstance().getLobby().register(account.getUser());
 			return account;
 		}
 
@@ -74,6 +79,8 @@ public class AccountManager {
 
 		System.out.println("New Balance = " + account.getBalance());
 		
+		account.broadcast(new BroadcastBalanceMessage(account.getBalance()));
+		
 		return account.getBalance();
 
 	}
@@ -81,7 +88,11 @@ public class AccountManager {
 	public double withdraw(String username, double amount) {
 		Account account = accounts.get(username);
 		account.withdraw(amount);
+		
 		saveAccounts();
+		
+		account.broadcast(new BroadcastBalanceMessage(account.getBalance()));
+		
 		return account.getBalance();
 	}
 

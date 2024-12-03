@@ -2,17 +2,17 @@ package client;
 
 import java.io.*;
 import java.net.*;
-import java.util.List;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import abstractMessages.AbstractMessage;
 import clientModel.Table;
 import message.CreateTableMessage;
 import message.DepositMessage;
 import message.GetTablesMessage;
-import message.JoinTableMessage;
+import message.JoinLobbyMessage;
 import message.LoginMessage;
 import message.WithdrawMessage;
 import model.Account;
@@ -27,8 +27,7 @@ import java.awt.event.ActionListener;
 public class ClientGui extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField hostField;
-	private JTextField portField; 
-	private JLabel balance;
+	private JTextField portField;
 	private JTextArea responseArea;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
@@ -109,7 +108,7 @@ public class ClientGui extends JFrame {
 				StateManager.getInstance().setAccount(loginResponse);
 				
 				// Save connection state
-				StateManager.getInstance().getAccount().getUser().setSocket(socket);
+				StateManager.getInstance().getAccount().getUser().setOutputStream(outputStream);
 				StateManager.getInstance().getClient().setInputStream(inputStream);
 				StateManager.getInstance().getClient().setOutputStream(outputStream);
 				
@@ -144,15 +143,7 @@ public class ClientGui extends JFrame {
 
 		// Close the current login frame
 		this.dispose();
-		
-		GetTablesMessage gtm = new GetTablesMessage();
-		List<LobbyTable> response = (List<LobbyTable>) SendMessage.getInstance().send(gtm);
-		
-		DefaultListModel<LobbyTable> listModel = new DefaultListModel<LobbyTable>();
-		
-		for (LobbyTable table: response) {
-			listModel.addElement(table);
-		}
+		SendMessage.getInstance().send(new JoinLobbyMessage());
 		
 		// Create a new JFrame for the main application
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -167,7 +158,7 @@ public class ClientGui extends JFrame {
 		frame.setLocationRelativeTo(null); // center the frame on the screen
 
 		// Create a JList using the DefaultListModel
-		JList<LobbyTable> jList = new JList<LobbyTable>(listModel);//TODO: recieve lobby object from server to create the list of tables.
+		JList<LobbyTable> jList = new JList<LobbyTable>(GuiController.getInstance().getLobbyTableListModel());//TODO: receive lobby object from server to create the list of tables.
 		jList.setFont(new Font("Arial", Font.PLAIN, 30));
 
 		// Add the JList wrapped in a JScrollPane to allow scrolling when items exceed
@@ -193,7 +184,6 @@ public class ClientGui extends JFrame {
 		JButton button2 = new JButton("Withdraw Funds");
 		JButton button3 = new JButton("Join Table");
 		JButton button4 = new JButton("Disconnect");
-		balance = new JLabel("ACCOUNT BALANCE:$" + StateManager.getInstance().getAccount().getBalance());
 
 		
 		
@@ -201,7 +191,7 @@ public class ClientGui extends JFrame {
 		buttonPanel.add(button2);
 		buttonPanel.add(button3);
 		buttonPanel.add(button4);
-		buttonPanel.add(balance);
+		buttonPanel.add(GuiController.getInstance().getBalance());
 
 		// Disable button until user selects from the list
 		button3.setEnabled(false);
@@ -244,6 +234,8 @@ public class ClientGui extends JFrame {
 	}
 
 	private void openDealerTableSelectionFrame() { //Placeholder TODO: Implement dealer view
+		SendMessage.getInstance().send(new JoinLobbyMessage());
+		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int frameWidth = (int) (screenSize.width * 0.5);
 		int frameHeigth = (int) (screenSize.height * 0.5);
@@ -256,7 +248,7 @@ public class ClientGui extends JFrame {
 		frame.setLocationRelativeTo(null); // center the frame on the screen
 
 		// Create a JList using the DefaultListModel
-		JList<String> jList = new JList<>(tableListModel);
+		JList<LobbyTable> jList = new JList<LobbyTable>(GuiController.getInstance().getLobbyTableListModel());
 		jList.setFont(new Font("Arial", Font.PLAIN, 30));
 
 		// Add the JList wrapped in a JScrollPane to allow scrolling when items exceed
@@ -307,7 +299,7 @@ public class ClientGui extends JFrame {
 				if (!e.getValueIsAdjusting()) { // Check if the event is adjusting
 
 					// Get the selected item
-					String selectedItem = jList.getSelectedValue();
+					LobbyTable selectedItem = jList.getSelectedValue();
 
 					// Enable button1 if an item is selected
 					button1.setEnabled(selectedItem != null);
@@ -389,16 +381,9 @@ public class ClientGui extends JFrame {
 			
 			// Send Deposit message, get account balance as response and update local account
 			DepositMessage dposit = new DepositMessage(number);
-			Object resp = SendMessage.getInstance().send(dposit);
-			System.out.print("Deposit Made new balance = " + resp);
+			SendMessage.getInstance().send(dposit);
 			
-			if(resp != null) {
-				StateManager.getInstance().getAccount().setBalance((double) resp);
-				balance.setText("Account Balance: " + (double) resp);
-				JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
-			} else {
-				JOptionPane.showMessageDialog(DepositFrame, "Error funds not deposited!");
-			}
+			JOptionPane.showMessageDialog(DepositFrame, "$" + numberField.getText() + " deposited");
 			
 			numberField.setText("");
 			DepositFrame.dispose();
@@ -435,16 +420,9 @@ public class ClientGui extends JFrame {
 			int number = Integer.parseInt(numberField.getText());
 			
 			WithdrawMessage withdraw = new WithdrawMessage(number);
-			Object resp = SendMessage.getInstance().send(withdraw);
+			SendMessage.getInstance().send(withdraw);
 			
-			if(resp != null) {
-				StateManager.getInstance().getAccount().setBalance((double) resp);
-				balance.setText("Account Balance: " + (double) resp);
-				JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
-			} else {
-				JOptionPane.showMessageDialog(WithdrawlFrame, "Error funds not withdraw!");
-			
-			}
+			JOptionPane.showMessageDialog(WithdrawlFrame, "$" + numberField.getText() + " withdrawn");
 			
 			numberField.setText("");
 			WithdrawlFrame.dispose();
@@ -464,15 +442,7 @@ public class ClientGui extends JFrame {
 	public void createTable() {
 		CreateTableMessage ctm = new CreateTableMessage();
 		
-		String resp = (String) SendMessage.getInstance().send(ctm);
-		
-		System.out.println(resp);
-		
-		if(resp == null) {
-			return;
-		}
-		
-		Table.getInstance().setTableId(resp);
+		SendMessage.getInstance().send(ctm);
 		
 		JOptionPane.showMessageDialog(null, Table.getInstance().getTableId());
 		
@@ -568,16 +538,25 @@ public class ClientGui extends JFrame {
 	private void startListeningForServerMessages() {
 	    new Thread(() -> {
 	    	// TODO: Add implementation of method listener here, this will be used when the server broadcasts messages to update clients on game state
-//	        try {
-//	            ObjectInputStream inputStream = StateManager.getInstance().getClient().getInputStream();
+	        try {
+	            ObjectInputStream inputStream = StateManager.getInstance().getClient().getInputStream();
 	            while (true) {
-//	                Object message = inputStream.readObject();
+	                Object message = inputStream.readObject();
+	                System.out.println("Received input: " + message);
 	                // Handle incoming messages
-//	                System.out.println("Received message: " + message);
+	                if(message instanceof AbstractMessage) {
+	                	System.out.println("Received Abstract Message: " + message);
+	                	AbstractMessage toExecute = (AbstractMessage) message;
+	                	toExecute.execute();
+	                }else {	                	
+	                	System.out.println("Received message: " + message);
+	                	SendMessage.getInstance().setMostRecentResponseObject(message);
+	                }
 	            }
-//	        } catch (IOException | ClassNotFoundException e) {
-//	            System.err.println("Connection lost: " + e.getMessage());
-//	        }
+	        } catch (IOException | ClassNotFoundException e) {
+	            System.err.println("Connection lost: " + e.getMessage());
+	            e.printStackTrace();
+	        }
 	    }).start();
 	}
 

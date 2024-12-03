@@ -1,7 +1,12 @@
 package model;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+
+import abstractMessages.AbstractMessage;
+import observable.Observable;
 
 public class Player extends User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -90,5 +95,20 @@ public class Player extends User implements Serializable {
     public String toString() {
         return "Player ID: " + id + ", Current Bet: " + currentBet + ", Account Balance: " + account.getBalance();
     }
+
+	@Override
+	public void update(AbstractMessage message) {
+		System.out.println("Updating player " + account.getUsername() + " with message: " + message);
+		try {
+			if (this.getOutputStream() != null) {
+				getOutputStream().writeObject(message);
+				getOutputStream().flush();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+	}
 
 }
