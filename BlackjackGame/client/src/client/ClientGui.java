@@ -241,10 +241,10 @@ public class ClientGui extends JFrame {
 		});
 
 		// add action listeners
-		button1.addActionListener(e -> {openDepositFrame(); frame.dispose();});
-		button2.addActionListener(e ->  {openWithdrawFrame(); frame.dispose();});
-		button3.addActionListener(e -> {joinTable(); frame.dispose();});
-		button4.addActionListener(e -> {disconnect(); frame.dispose();});
+		button1.addActionListener(e -> openDepositFrame());
+		button2.addActionListener(e -> openWithdrawFrame());
+		button3.addActionListener(e -> openBetPrompt());
+		button4.addActionListener(e -> disconnect());
 		
 		Message message = new Message("joinLobby");
 		message.setUsername(StateManager.getInstance().getAccount().getUsername());
@@ -498,6 +498,70 @@ public class ClientGui extends JFrame {
 		WithdrawlFrame.setVisible(true);
 	}
 
+	public void openBetPrompt() {
+		
+		// Create the main application frame
+		JFrame openBetFrame = new JFrame("Input Bet");
+		openBetFrame.setSize(800, 600); // Adjusted size
+		openBetFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		openBetFrame.setLocationRelativeTo(null); // Center the frame
+		openBetFrame.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		// Add welcome label at the top
+		JLabel betLabel = new JLabel("Input Bet", JLabel.CENTER);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.gridwidth = 2; // Spans across two columns
+		gbc.insets = new Insets(10, 10, 10, 10); // Add padding
+		gbc.anchor = GridBagConstraints.CENTER;
+		openBetFrame.add(betLabel, gbc);
+		
+		JPanel BetPanel = new JPanel();
+		BetPanel.setLayout(new GridLayout(8, 1, 1, 10));
+
+		JButton submitBet = new JButton("Bet");
+		JButton cancelBet = new JButton("Back");
+		
+		JTextField numberField = new JTextField(20);
+		
+		// Deposit button
+		submitBet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int number = Integer.parseInt(numberField.getText());
+
+				if (number <= 0) {
+					JOptionPane.showMessageDialog(openBetFrame, "Error: Invalid amount entered!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else if (0 > StateManager.getInstance().getAccount().getBalance() - number){
+					JOptionPane.showMessageDialog(openBetFrame, "Error: Insufficient Funds", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					numberField.setText("");
+					openBetFrame.dispose();
+					joinTable();
+				}
+			}
+		});
+
+		// Cancel button
+		cancelBet.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				numberField.setText("");
+				openBetFrame.dispose();
+			}
+		});
+		
+		BetPanel.add(numberField);
+		BetPanel.add(submitBet);
+		BetPanel.add(cancelBet);
+		
+		openBetFrame.add(BetPanel);
+		
+		openBetFrame.setVisible(true);
+		
+	}
+	
 	public void joinTable() {
 		// TODO: Add message to join table from selected table here
 		if (selectedTable != null) {
