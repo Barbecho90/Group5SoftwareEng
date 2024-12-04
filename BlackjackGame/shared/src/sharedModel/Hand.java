@@ -163,7 +163,7 @@ public class Hand implements Serializable{
 
 	public Card getTopCard() {
 		// For dealers only. Returns the top card to show to players
-		return hand.getFirst();
+		return hand.get(0);
 	}
 	// clear hand for new rounds
 	public void clear() {

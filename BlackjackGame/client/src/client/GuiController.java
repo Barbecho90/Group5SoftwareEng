@@ -69,14 +69,31 @@ public class GuiController {
 		ArrayList<Player> toAdd = players != null ? new ArrayList<Player>(players) : new ArrayList<Player>();
 		System.out.println("toAdd: " + toAdd);
 		for (int i = 0; i < 6; i++) {
-			if (i < toAdd.size()) {
-				JLabel userLabel = new JLabel(toAdd.get(i).getAccount().getUsername(), JLabel.CENTER);
-				userSeatPanel.add(userLabel);
+			JPanel userSeat = new JPanel();
+			userSeat.setLayout(new GridLayout(3, 1, 10, 10));
+			
+			if (StateManager.getInstance().getTable() != null
+					&& i < StateManager.getInstance().getTable().getNumPlayers()) {
+				
+				JLabel userName= new JLabel("Name: " +
+						StateManager.getInstance().getTable().getPlayerList().get(i).getAccount().getUsername(), JLabel.CENTER);
+				JLabel userHand = new JLabel("Hand: " + 
+						Integer.toString(StateManager.getInstance().getTable().getPlayerList().get(i).getHand().getHandValue()), JLabel.CENTER);
+				JLabel userCurrentBet = new JLabel("Bet: " + 
+						Integer.toString((int)StateManager.getInstance().getTable().getPlayerList().get(i).getCurrentBet()), JLabel.CENTER);
+				userSeat.add(userName);		
+				userSeat.add(userHand);		
+				userSeat.add(userCurrentBet);		
+				
+				userSeatPanel.add(userSeat);
 			} else {
-				JLabel userLabel = new JLabel("<EMPTY>", JLabel.CENTER);
-				userSeatPanel.add(userLabel);
+				
+				JLabel userName = new JLabel("<EMPTY>", JLabel.CENTER);
+				userSeat.add(userName);
+				userSeatPanel.add(userSeat);
 			}
 		}
+
 		userSeatPanel.revalidate();
 		userSeatPanel.repaint();
 	}
