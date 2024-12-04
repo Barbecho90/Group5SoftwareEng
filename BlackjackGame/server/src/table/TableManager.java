@@ -3,7 +3,7 @@ package table;
 import java.util.ArrayList;
 import java.util.List;
 
-import message.BroadcastLobbyTabblesMessage;
+import message.SimpleMessage;
 import model.Dealer;
 import model.Lobby;
 import model.LobbyTable;
@@ -30,13 +30,19 @@ public class TableManager {
 	public String createTable(Dealer dealer) {
 		AbstractTable table = new Table(dealer);
 		
+		// Remove from watching the lobby and add to watching the table
+		Lobby.getInstance().unregister(dealer);
+		table.register(dealer);
+		
 		tables.add(table);
 		
 		// Update the lobby
 		Lobby.getInstance().addNewTable(new LobbyTable(table.getId(), table.getNumPlayers(), table.getMinBet()));
-		System.out.println("New Table with Lobby");
-		System.out.println(Lobby.getInstance().getTableList());
-		Lobby.getInstance().broadcast(new BroadcastLobbyTabblesMessage(Lobby.getInstance().getTableList()));
+		
+		// Update the users in the lobby
+		SimpleMessage message = new SimpleMessage("updateTables");
+		message.setTables(Lobby.getInstance().getTableList());
+		Lobby.getInstance().broadcast(message);
 		
 		return table.getId();
 	}
@@ -44,12 +50,19 @@ public class TableManager {
 	// Player Joins the lobby
 	public void playerJoinsLobby(Player player) {
 		Lobby.getInstance().addPlayerToLobby(player);
-		Lobby.getInstance().broadcast(new BroadcastLobbyTabblesMessage(Lobby.getInstance().getTableList()));
+		
+		SimpleMessage message = new SimpleMessage("updateTables");
+		message.setTables(Lobby.getInstance().getTableList());
+		Lobby.getInstance().broadcast(message);
 	}
 	
+	// Dealer Joins lobby
 	public void dealerJoinsLobby(Dealer dealer) {
 		Lobby.getInstance().addDealerToLobby(dealer);
-		Lobby.getInstance().broadcast(new BroadcastLobbyTabblesMessage(Lobby.getInstance().getTableList()));
+		
+		SimpleMessage message = new SimpleMessage("updateTables");
+		message.setTables(Lobby.getInstance().getTableList());
+		Lobby.getInstance().broadcast(message);
 	}
 
 	// list of table info
@@ -85,12 +98,17 @@ public class TableManager {
 	}
 
 	// Add a player to a specific table
-	// TODO: Make a table info class to give client table information
 	public String joinTable(String tableId, Player player) {
 		for (AbstractTable table : tables) {
 			if (table.getId().equals(tableId)) {
 				if (table.isOpen()) {
+					// Join the table if able to
 					table.joinTable(player); //method from Table class
+					
+					// Move the player from watching the lobby to watching the game
+					Lobby.getInstance().unregister(player);
+					table.register(player);
+					
 					return table.getId();
 				} else {
 	                System.out.println("Table is closed or full.");

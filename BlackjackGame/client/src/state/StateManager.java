@@ -1,6 +1,8 @@
 package state;
 
 import clientModel.ClientConnection;
+import clientModel.Table;
+import model.AbstractTable;
 import model.Account;
 
 public class StateManager {
@@ -8,6 +10,7 @@ public class StateManager {
 	
 	private ClientConnection client;
 	private Account account;
+	private Table table;
 	
 	private StateManager() {
 		client = new ClientConnection();
@@ -35,5 +38,13 @@ public class StateManager {
 
 	public void setClient(ClientConnection client) {
 		this.client = client;
+	}
+
+	public Table getTable() {
+		return table;
+	}
+
+	public void setTable(Table table) {
+		this.table = table;
 	}
 }

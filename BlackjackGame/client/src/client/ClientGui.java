@@ -14,6 +14,7 @@ import message.DepositMessage;
 import message.GetTablesMessage;
 import message.JoinLobbyMessage;
 import message.LoginMessage;
+import message.SimpleMessage;
 import message.WithdrawMessage;
 import model.AbstractTable;
 import model.Account;
@@ -32,18 +33,12 @@ public class ClientGui extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JTextField hostField;
 	private JTextField portField;
-	private JTextArea responseArea;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
-	private DefaultListModel<String> tableListModel = new DefaultListModel<>(); // To store the list of Tables
-	private DefaultListModel<String> playerListModel = new DefaultListModel<>(); // Need a GetPlayersMessage to fill list
+	private LobbyTable selectedTable;
 	
 	private LoginMessage loginMessage;
-	private LobbyTable selectedTable;
 	private Account account;
-	private ROLE role;
-	private Dealer dealer;
-	private Player player;
 
 	private static final String SERVER_ADDRESS = "192.168.0.71"; // Default
 	private static final int SERVER_PORT = 12345;
@@ -136,10 +131,8 @@ public class ClientGui extends JFrame {
 				this.dispose();
 				//set player or dealer
 				if (loginMessage.username.contains("user")) {
-					player = new Player(account);
 					openMainAppFrame();
 				} else if (loginMessage.username.contains("dealer")) {
-					dealer = new Dealer();//TODO: set lobby and min bet arguments
 					openDealerTableSelectionFrame();
 				}
 
@@ -162,7 +155,9 @@ public class ClientGui extends JFrame {
 
 		// Close the current login frame
 		this.dispose();
-		SendMessage.getInstance().send(new JoinLobbyMessage());
+		SimpleMessage message = new SimpleMessage("joinLobby");
+		message.setUsername(StateManager.getInstance().getAccount().getUsername());
+		SendMessage.getInstance().send(message);
 		
 		// Create a new JFrame for the main application
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -406,16 +401,9 @@ public class ClientGui extends JFrame {
 			} else {
 				// Send Deposit message, get account balance as response and update local account
 				DepositMessage dposit = new DepositMessage(number);
-				Object resp = SendMessage.getInstance().send(dposit);
-				System.out.print("Deposit Made new balance = " + resp);
+				SendMessage.getInstance().send(dposit);
+//				System.out.print("Deposit Made new balance = " + resp);
 				
-				if(resp != null) {
-					StateManager.getInstance().getAccount().setBalance((double) resp);
-					balance.setText("Account Balance: " + (double) resp);
-					JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
-				} else {
-					JOptionPane.showMessageDialog(DepositFrame, "Error funds not deposited!");
-				}
 				
 				numberField.setText("");
 				DepositFrame.dispose();
@@ -470,16 +458,16 @@ public class ClientGui extends JFrame {
 							JOptionPane.ERROR_MESSAGE);
 				} else {
 					WithdrawMessage withdraw = new WithdrawMessage(number);
-					Object resp = SendMessage.getInstance().send(withdraw);
+					SendMessage.getInstance().send(withdraw);
 					
-					if(resp != null) {
-						StateManager.getInstance().getAccount().setBalance((double) resp);
-						balance.setText("Account Balance: " + (double) resp);
-						JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
-					} else {
-						JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Funds not withdraw!", "Error", JOptionPane.ERROR_MESSAGE);
-					
-					}
+//					if(resp != null) {
+//						StateManager.getInstance().getAccount().setBalance((double) resp);
+//						balance.setText("Account Balance: " + (double) resp);
+//						JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
+//					} else {
+//						JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Funds not withdraw!", "Error", JOptionPane.ERROR_MESSAGE);
+//					
+//					}
 					
 					numberField.setText("");
 					WithdrawlFrame.dispose();
@@ -503,6 +491,7 @@ public class ClientGui extends JFrame {
 	}
 	
 	public void joinTable() {
+		// TODO: Add message to join table from selected table here
 	    // Close the current login frame
 	    this.dispose();
 

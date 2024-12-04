@@ -3,7 +3,9 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public abstract class AbstractTable implements Serializable{
+import observable.Observable;
+
+public abstract class AbstractTable extends Observable implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	// Dealer class should initialize with a Table
@@ -25,7 +27,7 @@ public abstract class AbstractTable implements Serializable{
 	}
 
 	public void joinTable(Player player) {
-		if (players.size() < 5) {
+		if (players.size() < 6) {
 			players.add(player);
 			numPlayers++;
 			System.out.println("Player " + player.getId() + " joined the table. Total players: " + numPlayers);
@@ -107,7 +109,7 @@ public abstract class AbstractTable implements Serializable{
 
 	public boolean isOpen() {
 
-		return (hostDealer != null && numPlayers < 5);
+		return (hostDealer != null && numPlayers < 6);
 
 	}
 

@@ -13,7 +13,10 @@ public class GetTablesMessage extends AbstractGetTablesMessage {
 
 	@Override
 	public Object execute() {
-		TableManager.getInstance().getLobby().broadcast(new BroadcastLobbyTabblesMessage(TableManager.getInstance().getLobbyTables()));
+		SimpleMessage message = new SimpleMessage("updateTables");
+		message.setTables(TableManager.getInstance().getLobbyTables());
+		TableManager.getInstance().getLobby().broadcast(message);
+		
 		return TableManager.getInstance().getLobbyTables();
 	}
 
