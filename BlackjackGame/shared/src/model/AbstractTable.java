@@ -55,10 +55,10 @@ public abstract class AbstractTable implements Serializable{
 		return this.minBet;
 	}
 
-	/*
-	 * public void setMinBet(int minBet) { //Dealer will set the minBet once
-	 * initialized this.minBet = minBet; }
-	 */
+	public void setMinBet(int minBet) {
+		// TODO Auto-generated method stub
+		this.minBet = minBet;
+	}
 
 	public int getMinCardBeforeShuffle() {
 		return this.minCardIndBeforeShuffle;
@@ -89,11 +89,6 @@ public abstract class AbstractTable implements Serializable{
 	public void setDealerShowCard(Card seenCard) {
 		// once dealer deals the cards, they will set the seenCard
 //		this.dealerShowCard = seenCard;
-	}
-
-	public void setMinBet(int minBet) {
-		// TODO Auto-generated method stub
-		this.minBet = minBet;
 	}
 
 	public Shoe getNewShoe() {

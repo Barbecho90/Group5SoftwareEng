@@ -88,6 +88,7 @@ public class Server extends Observable {
 						outputStream.writeObject(account);
 						outputStream.flush();
 					}
+					
 				}
 
 			} catch (EOFException e) {

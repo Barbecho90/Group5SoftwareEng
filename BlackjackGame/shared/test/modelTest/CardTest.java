@@ -10,10 +10,10 @@ import model.Card;
 import model.Card.CardRank;
 import model.Card.CardSuit;
 
-class CardTest {
+public class CardTest {
 
 	@Test
-	void testCardConstructor() {
+	public void testCardConstructor() {
 		Card card1 = new Card(3, 3);
 		assertEquals(CardSuit.Diamonds, card1.getSuit());
 		assertEquals(CardRank.Three, card1.getRank());

@@ -15,8 +15,12 @@ import message.GetTablesMessage;
 import message.JoinLobbyMessage;
 import message.LoginMessage;
 import message.WithdrawMessage;
+import model.AbstractTable;
 import model.Account;
+import model.Dealer;
 import model.LobbyTable;
+import model.Player;
+import model.ROLE;
 import serverCommunicator.SendMessage;
 import state.StateManager;
 
@@ -36,6 +40,10 @@ public class ClientGui extends JFrame {
 	
 	private LoginMessage loginMessage;
 	private LobbyTable selectedTable;
+	private Account account;
+	private ROLE role;
+	private Dealer dealer;
+	private Player player;
 
 	private static final String SERVER_ADDRESS = "192.168.0.71"; // Default
 	private static final int SERVER_PORT = 12345;
@@ -80,8 +88,15 @@ public class ClientGui extends JFrame {
 				e1.printStackTrace();
 			}
 		});
+		
+		// Cancel Button
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(e -> {
+			dispose();
+		});
+		
 		add(connectButton);
-
+		add(cancelButton);
 	}
 
 	private void connectToServer() throws ClassNotFoundException {
@@ -101,12 +116,12 @@ public class ClientGui extends JFrame {
 			outputStream.flush();
 
 			// Receive login response
-			Account loginResponse = (Account) inputStream.readObject();
+			account = (Account) inputStream.readObject();
 
 			// Check Server's response
-			if (loginResponse != null) {
+			if (account != null) {
 				// Set Account for local use
-				StateManager.getInstance().setAccount(loginResponse);
+				StateManager.getInstance().setAccount(account);
 				
 				// Save connection state
 				StateManager.getInstance().getAccount().getUser().setOutputStream(outputStream);
@@ -119,14 +134,17 @@ public class ClientGui extends JFrame {
 				JOptionPane.showMessageDialog(this, "Login Successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
 				// Close the current login frame
 				this.dispose();
+				//set player or dealer
 				if (loginMessage.username.contains("user")) {
+					player = new Player(account);
 					openMainAppFrame();
 				} else if (loginMessage.username.contains("dealer")) {
+					dealer = new Dealer();//TODO: set lobby and min bet arguments
 					openDealerTableSelectionFrame();
 				}
 
 			} else {
-				JOptionPane.showMessageDialog(this, "Login Failed: " + loginResponse, "Error",
+				JOptionPane.showMessageDialog(this, "Login Failed: " + account, "Error",
 						JOptionPane.ERROR_MESSAGE);
 
 			}
@@ -373,27 +391,49 @@ public class ClientGui extends JFrame {
 		DepositPanel.setLayout(new GridLayout(8, 1, 1, 10));
 		
 		JButton submitDeposit = new JButton("Deposit");
+		JButton cancelDeposit = new JButton("Back");
 		
 		JTextField numberField = new JTextField(20);
 		
+		//Deposit button
 		submitDeposit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
 			
-			// Send Deposit message, get account balance as response and update local account
-			DepositMessage dposit = new DepositMessage(number);
-			SendMessage.getInstance().send(dposit);
-			
-			JOptionPane.showMessageDialog(DepositFrame, "$" + numberField.getText() + " deposited");
-			
-			numberField.setText("");
-			DepositFrame.dispose();
+			if (number <= 0) {
+				JOptionPane.showMessageDialog(DepositFrame, "Error: Invalid amount entered!", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				// Send Deposit message, get account balance as response and update local account
+				DepositMessage dposit = new DepositMessage(number);
+				Object resp = SendMessage.getInstance().send(dposit);
+				System.out.print("Deposit Made new balance = " + resp);
+				
+				if(resp != null) {
+					StateManager.getInstance().getAccount().setBalance((double) resp);
+					balance.setText("Account Balance: " + (double) resp);
+					JOptionPane.showMessageDialog(DepositFrame, "$" + number + " Deposited");
+				} else {
+					JOptionPane.showMessageDialog(DepositFrame, "Error funds not deposited!");
+				}
+				
+				numberField.setText("");
+				DepositFrame.dispose();
+				}	
 			}
-			
+		});
+		
+		//Cancel button
+		cancelDeposit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				numberField.setText("");
+				DepositFrame.dispose();
+			}
 		});
 		
 		DepositPanel.add(numberField);
 		DepositPanel.add(submitDeposit);
+		DepositPanel.add(cancelDeposit);
 		DepositFrame.add(DepositPanel);
 		DepositFrame.setVisible(true);
 	}
@@ -415,23 +455,49 @@ public class ClientGui extends JFrame {
 		JTextField numberField = new JTextField(20);
 		
 		JButton submitWithdrawl = new JButton("Withdrawl");
+		JButton cancelWithdrawl = new JButton("Back");
 		
+		//Withdrawl button
 		submitWithdrawl.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			int number = Integer.parseInt(numberField.getText());
 			
-			WithdrawMessage withdraw = new WithdrawMessage(number);
-			SendMessage.getInstance().send(withdraw);
-			
-			JOptionPane.showMessageDialog(WithdrawlFrame, "$" + numberField.getText() + " withdrawn");
-			
-			numberField.setText("");
-			WithdrawlFrame.dispose();
+				if (number <= 0) {
+					JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Invalid amount entered!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else if (number > StateManager.getInstance().getAccount().getBalance()) {
+					JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Insufficient funds!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				} else {
+					WithdrawMessage withdraw = new WithdrawMessage(number);
+					Object resp = SendMessage.getInstance().send(withdraw);
+					
+					if(resp != null) {
+						StateManager.getInstance().getAccount().setBalance((double) resp);
+						balance.setText("Account Balance: " + (double) resp);
+						JOptionPane.showMessageDialog(WithdrawlFrame, "$" + number + " Withdraw");
+					} else {
+						JOptionPane.showMessageDialog(WithdrawlFrame, "Error: Funds not withdraw!", "Error", JOptionPane.ERROR_MESSAGE);
+					
+					}
+					
+					numberField.setText("");
+					WithdrawlFrame.dispose();
+					}
+				}
+		});
+		
+		//Cancel button
+		cancelWithdrawl.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				numberField.setText("");
+				WithdrawlFrame.dispose();
 			}
 		});
 		
 		WithdrawlPanel.add(numberField);
 		WithdrawlPanel.add(submitWithdrawl);
+		WithdrawlPanel.add(cancelWithdrawl);
 		WithdrawlFrame.add(WithdrawlPanel);
 		WithdrawlFrame.setVisible(true);
 	}
@@ -663,6 +729,9 @@ public class ClientGui extends JFrame {
 	}
 	
 	private void closeTable() {
+
+		openDealerTableSelectionFrame();
+
 		// Requires to close instance of table associated with the dealer
 	}
 	

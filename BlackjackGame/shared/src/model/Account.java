@@ -38,7 +38,7 @@ public class Account extends Observable implements Serializable {
 	}
 
 	// Getters
-
+	
 	public ROLE getRole() {
 		return role;
 	}
