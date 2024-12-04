@@ -77,7 +77,7 @@ public class Table extends AbstractTable {
 	        for (Player player : this.players) {
 	            while (true) {
 	                // Simulate player actions (e.g., HIT, STAND, SPLIT, DOUBLE_DOWN)
-	                String action = player.decideAction(); // Assuming players decide actions programmatically
+	                String action = null;  //ToDo 
 	                if ("HIT".equals(action)) {
 	                    player.getHand().addCard(this.hostDealer.getNextCard());
 	                    if (player.getHand().isBusted()) {

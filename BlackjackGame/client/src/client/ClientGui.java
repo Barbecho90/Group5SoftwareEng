@@ -236,6 +236,7 @@ public class ClientGui extends JFrame {
 					selectedTable = selectedItem;
 					// Enable button1 if an item is selected
 					button3.setEnabled(selectedItem != null);
+					
 				}
 			}
 		});
