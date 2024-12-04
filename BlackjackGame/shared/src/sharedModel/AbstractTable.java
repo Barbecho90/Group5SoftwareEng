@@ -30,10 +30,10 @@ public abstract class AbstractTable extends Observable implements Serializable{
 		if (players.size() < 6) {
 			players.add(player);
 			numPlayers++;
-			System.out.println("Player " + player.getId() + " joined the table. Total players: " + numPlayers);
+			System.out.println("Player " + player.getAccount().getUsername() + " joined the table. Total players: " + numPlayers);
 
 		} else {
-			System.out.println("Table is full or closed. Player " + player.getId() + " cannot join.");
+			System.out.println("Table is full or closed. Player " + player.getAccount().getUsername() + " cannot join.");
 		}
 	}
 

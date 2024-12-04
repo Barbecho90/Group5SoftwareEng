@@ -5,6 +5,7 @@ import java.util.List;
 
 import sharedModel.AbstractTable;
 import sharedModel.LobbyTable;
+import sharedModel.Player;
 
 public abstract class AbstractSimpleMessage extends AbstractMessage{
 
@@ -28,6 +29,13 @@ public abstract class AbstractSimpleMessage extends AbstractMessage{
 	private double balance;
 	private double amount;
 	private AbstractTable table;
+	private List<Player> players;
+	
+	// For debugging/logging
+	@Override
+	public String toString() {
+		return "Message type = " + type;
+	}
 	
 	// Getters and setters to add the data and set the types
 	public String getType() {
@@ -61,9 +69,10 @@ public abstract class AbstractSimpleMessage extends AbstractMessage{
 		this.table = table;
 	}
 	
-	// For debugging/logging
-	@Override
-	public String toString() {
-		return "Message type = " + type;
+	public List<Player> getPlayers() {
+		return players;
+	}
+	public void setPlayers(List<Player> players) {
+		this.players = new ArrayList<Player>(players);
 	}
 }
