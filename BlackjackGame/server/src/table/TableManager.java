@@ -3,7 +3,7 @@ package table;
 import java.util.ArrayList;
 import java.util.List;
 
-import message.SimpleMessage;
+import message.Message;
 import model.Dealer;
 import model.Lobby;
 import model.LobbyTable;
@@ -40,7 +40,7 @@ public class TableManager {
 		Lobby.getInstance().addNewTable(new LobbyTable(table.getId(), table.getNumPlayers(), table.getMinBet()));
 		
 		// Update the users in the lobby
-		SimpleMessage message = new SimpleMessage("updateTables");
+		Message message = new Message("updateTables");
 		message.setTables(Lobby.getInstance().getTableList());
 		Lobby.getInstance().broadcast(message);
 		
@@ -51,7 +51,7 @@ public class TableManager {
 	public void playerJoinsLobby(Player player) {
 		Lobby.getInstance().addPlayerToLobby(player);
 		
-		SimpleMessage message = new SimpleMessage("updateTables");
+		Message message = new Message("updateTables");
 		message.setTables(Lobby.getInstance().getTableList());
 		Lobby.getInstance().broadcast(message);
 	}
@@ -60,7 +60,7 @@ public class TableManager {
 	public void dealerJoinsLobby(Dealer dealer) {
 		Lobby.getInstance().addDealerToLobby(dealer);
 		
-		SimpleMessage message = new SimpleMessage("updateTables");
+		Message message = new Message("updateTables");
 		message.setTables(Lobby.getInstance().getTableList());
 		Lobby.getInstance().broadcast(message);
 	}

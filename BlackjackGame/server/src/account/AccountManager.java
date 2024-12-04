@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import message.SimpleMessage;
+import message.Message;
 import model.Account;
 import model.Dealer;
 import model.Player;
@@ -79,7 +79,7 @@ public class AccountManager {
 
 		System.out.println("New Balance = " + account.getBalance());
 		
-		SimpleMessage message = new SimpleMessage("updateBalance");
+		Message message = new Message("updateBalance");
 		message.setBalance(account.getBalance());
 		
 		account.broadcast(message);
@@ -94,7 +94,7 @@ public class AccountManager {
 		
 		saveAccounts();
 		
-		SimpleMessage message = new SimpleMessage("updateBalance");
+		Message message = new Message("updateBalance");
 		message.setBalance(account.getBalance());
 		
 		account.broadcast(message);

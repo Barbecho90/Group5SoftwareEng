@@ -4,13 +4,13 @@ import abstractMessages.AbstractSimpleMessage;
 import client.GuiController;
 import state.StateManager;
 
-public class SimpleMessage extends AbstractSimpleMessage{
+public class Message extends AbstractSimpleMessage{
 
 	private static final long serialVersionUID = 1L;
 
-	public SimpleMessage() {}
+	public Message() {}
 	
-	public SimpleMessage(String type) {
+	public Message(String type) {
 		this.setType(type);
 	}
 	

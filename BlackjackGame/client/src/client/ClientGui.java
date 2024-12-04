@@ -12,9 +12,8 @@ import clientModel.Table;
 import message.CreateTableMessage;
 import message.DepositMessage;
 import message.GetTablesMessage;
-import message.JoinLobbyMessage;
 import message.LoginMessage;
-import message.SimpleMessage;
+import message.Message;
 import message.WithdrawMessage;
 import model.AbstractTable;
 import model.Account;
@@ -155,7 +154,7 @@ public class ClientGui extends JFrame {
 
 		// Close the current login frame
 		this.dispose();
-		SimpleMessage message = new SimpleMessage("joinLobby");
+		Message message = new Message("joinLobby");
 		message.setUsername(StateManager.getInstance().getAccount().getUsername());
 		SendMessage.getInstance().send(message);
 		
@@ -248,7 +247,8 @@ public class ClientGui extends JFrame {
 	}
 
 	private void openDealerTableSelectionFrame() { //Placeholder TODO: Implement dealer view
-		SendMessage.getInstance().send(new JoinLobbyMessage());
+		Message message = new Message("joinLobby");
+		message.setUsername(StateManager.getInstance().getAccount().getUsername());
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		int frameWidth = (int) (screenSize.width * 0.5);
