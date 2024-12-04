@@ -1,7 +1,7 @@
 package main;
 
-import model.Account;
-import model.ROLE;
+import sharedModel.Account;
+import sharedModel.ROLE;
 
 public class Main {
 

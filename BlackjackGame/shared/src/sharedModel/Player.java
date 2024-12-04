@@ -1,4 +1,4 @@
-package model;
+package sharedModel;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import abstractMessages.AbstractMessage;
-import observable.Observable;
 
 public class Player extends User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -93,7 +92,7 @@ public class Player extends User implements Serializable {
 
 	@Override
     public String toString() {
-        return "Player ID: " + id + ", Current Bet: " + currentBet + ", Account Balance: " + account.getBalance();
+        return "Player Username: " + account.getUsername() + ", Current Bet: " + currentBet + ", Account Balance: " + account.getBalance();
     }
 
 	@Override

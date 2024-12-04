@@ -5,10 +5,10 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.Card;
-import model.Dealer;
-import model.Lobby;
-import model.AbstractTable;
+import sharedModel.AbstractTable;
+import sharedModel.Card;
+import sharedModel.Dealer;
+import sharedModel.Lobby;
 
 public class DealerTest {
 	

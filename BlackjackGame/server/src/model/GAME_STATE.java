@@ -1,4 +1,4 @@
-package serverModel;
+package model;
 
 /**
  * Game flow goes from 

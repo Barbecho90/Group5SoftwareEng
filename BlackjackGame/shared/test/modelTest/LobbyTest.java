@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import model.Lobby;
-import model.AbstractTable;
+import sharedModel.AbstractTable;
+import sharedModel.Lobby;
 
 public class LobbyTest {
 	

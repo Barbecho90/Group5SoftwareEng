@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import message.Message;
-import model.Dealer;
-import model.Lobby;
-import model.LobbyTable;
-import model.Player;
-import serverModel.Table;
-import model.AbstractTable;
+import model.Table;
+import sharedModel.AbstractTable;
+import sharedModel.Dealer;
+import sharedModel.Lobby;
+import sharedModel.LobbyTable;
+import sharedModel.Player;
 
 public class TableManager {
 	private ArrayList<AbstractTable> tables;
@@ -36,13 +36,15 @@ public class TableManager {
 		
 		tables.add(table);
 		
+		Message message = new Message("joinTable");
+		message.setTable(table);
+		table.broadcast(message);
+		
 		// Update the lobby
 		Lobby.getInstance().addNewTable(new LobbyTable(table.getId(), table.getNumPlayers(), table.getMinBet()));
 		
 		// Update the users in the lobby
-		Message message = new Message("updateTables");
-		message.setTables(Lobby.getInstance().getTableList());
-		Lobby.getInstance().broadcast(message);
+		sendLobbyUpdates();
 		
 		return table.getId();
 	}
@@ -51,18 +53,14 @@ public class TableManager {
 	public void playerJoinsLobby(Player player) {
 		Lobby.getInstance().addPlayerToLobby(player);
 		
-		Message message = new Message("updateTables");
-		message.setTables(Lobby.getInstance().getTableList());
-		Lobby.getInstance().broadcast(message);
+		sendLobbyUpdates();
 	}
 	
 	// Dealer Joins lobby
 	public void dealerJoinsLobby(Dealer dealer) {
 		Lobby.getInstance().addDealerToLobby(dealer);
 		
-		Message message = new Message("updateTables");
-		message.setTables(Lobby.getInstance().getTableList());
-		Lobby.getInstance().broadcast(message);
+		sendLobbyUpdates();
 	}
 
 	// list of table info
@@ -109,6 +107,20 @@ public class TableManager {
 					Lobby.getInstance().unregister(player);
 					table.register(player);
 					
+					// Update the lobby table player count
+					for(LobbyTable lt : Lobby.getInstance().getTableList()) {
+						if(lt.getTableId().equals(table.getId())) {
+							lt.setPlayerCount(table.getNumPlayers());
+							break;
+						}
+					}
+					
+					sendLobbyUpdates();
+					
+					Message message = new Message("joinTable");
+					message.setTable(table);
+					table.broadcast(message);
+					
 					return table.getId();
 				} else {
 	                System.out.println("Table is closed or full.");
@@ -124,12 +136,20 @@ public class TableManager {
 		for (AbstractTable table : tables) {
 			if (table.getId().equals(tableId) && table.getPlayerList().contains(player)) {
 				table.leaveTable(player);
+				table.unregister(player);
 				return true;
 			}
 			break;
 
 		}
 		return false; // Table not found
+	}
+	
+	// Send lobby updates - notifies watchers when tables update
+	private void sendLobbyUpdates() {
+		Message message = new Message("updateTables");
+		message.setTables(Lobby.getInstance().getTableList());
+		Lobby.getInstance().broadcast(message);
 	}
 	
 	public AbstractTable getTableById(String id) {

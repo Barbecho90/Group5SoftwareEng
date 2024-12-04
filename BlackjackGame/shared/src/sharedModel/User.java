@@ -1,4 +1,4 @@
-package model;
+package sharedModel;
 
 import java.io.ObjectOutputStream;
 

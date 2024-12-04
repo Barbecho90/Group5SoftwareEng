@@ -2,7 +2,7 @@ package message;
 
 import abstractMessages.AbstractJoinTableMessage;
 import account.AccountManager;
-import model.Player;
+import sharedModel.Player;
 import table.TableManager;
 
 public class JoinTableMessage extends AbstractJoinTableMessage{

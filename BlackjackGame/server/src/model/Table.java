@@ -1,12 +1,12 @@
-package serverModel;
+package model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import model.AbstractTable;
-import model.Dealer;
-import model.Hand;
-import model.Player;
+import sharedModel.AbstractTable;
+import sharedModel.Dealer;
+import sharedModel.Hand;
+import sharedModel.Player;
 
 public class Table extends AbstractTable {
 	private static final long serialVersionUID = 1L;

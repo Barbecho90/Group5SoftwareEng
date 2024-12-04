@@ -1,4 +1,4 @@
-package model;
+package sharedModel;
 
 public class Constants {
 	public static int NUMBER_OF_DECKS = 4;

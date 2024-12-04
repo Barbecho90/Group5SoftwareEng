@@ -5,9 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import model.Account;
-import model.Player;
-import model.ROLE;
+import sharedModel.Account;
+import sharedModel.Player;
+import sharedModel.ROLE;
 
 import org.junit.Before;
 

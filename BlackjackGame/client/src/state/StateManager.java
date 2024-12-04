@@ -1,16 +1,16 @@
 package state;
 
-import clientModel.ClientConnection;
-import clientModel.Table;
-import model.AbstractTable;
-import model.Account;
+import model.ClientConnection;
+import model.Table;
+import sharedModel.AbstractTable;
+import sharedModel.Account;
 
 public class StateManager {
 	private static StateManager instance = null;
 	
 	private ClientConnection client;
 	private Account account;
-	private Table table;
+	private AbstractTable table;
 	
 	private StateManager() {
 		client = new ClientConnection();
@@ -40,11 +40,11 @@ public class StateManager {
 		this.client = client;
 	}
 
-	public Table getTable() {
+	public AbstractTable getTable() {
 		return table;
 	}
 
-	public void setTable(Table table) {
-		this.table = table;
+	public void setTable(AbstractTable abstractTable) {
+		this.table = abstractTable;
 	}
 }

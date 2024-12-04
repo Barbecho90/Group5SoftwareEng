@@ -3,7 +3,8 @@ package abstractMessages;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.LobbyTable;
+import sharedModel.AbstractTable;
+import sharedModel.LobbyTable;
 
 public abstract class AbstractSimpleMessage extends AbstractMessage{
 
@@ -20,11 +21,13 @@ public abstract class AbstractSimpleMessage extends AbstractMessage{
 	 *  Client:
 	 *   - updateBalance
 	 *   - updateTables
+	 *   - joinTable
 	 */
 	private String type; // The type of message being sent
 	private List<LobbyTable> tables;
 	private double balance;
 	private double amount;
+	private AbstractTable table;
 	
 	// Getters and setters to add the data and set the types
 	public String getType() {
@@ -50,5 +53,17 @@ public abstract class AbstractSimpleMessage extends AbstractMessage{
 	}
 	public void setAmount(double amount) {
 		this.amount = amount;
+	}
+	public AbstractTable getTable() {
+		return table;
+	}
+	public void setTable(AbstractTable table) {
+		this.table = table;
+	}
+	
+	// For debugging/logging
+	@Override
+	public String toString() {
+		return "Message type = " + type;
 	}
 }

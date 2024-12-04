@@ -1,9 +1,9 @@
-package model;
+package sharedModel;
 
 import java.io.Serializable;
 
-import model.Card.CardRank;
-import model.Card.CardSuit;
+import sharedModel.Card.CardRank;
+import sharedModel.Card.CardSuit;
 
 public class Card implements Serializable{
 	private static final long serialVersionUID = 1L;

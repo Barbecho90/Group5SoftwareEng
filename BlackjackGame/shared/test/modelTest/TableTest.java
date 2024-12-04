@@ -8,9 +8,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import model.AbstractTable;
-import model.Dealer;
-import model.Player;
+import sharedModel.AbstractTable;
+import sharedModel.Dealer;
+import sharedModel.Player;
 
 public class TableTest {
     private AbstractTable table;

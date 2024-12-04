@@ -1,9 +1,7 @@
-package clientModel;
+package model;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
-import model.Account;
 
 /** 
  * save the input and output for the GUI - maintains the connection
