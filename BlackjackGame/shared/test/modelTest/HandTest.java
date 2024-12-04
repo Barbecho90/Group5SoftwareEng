@@ -3,13 +3,12 @@ package modelTest;
 //import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import sharedModel.Card;
+import sharedModel.Hand;
+import sharedModel.Shoe;
+
 import java.util.ArrayList;
-
-//import org.junit.jupiter.api.Test;
-
-import model.Shoe;
-import model.Hand;
-import model.Card;
 
 public class HandTest {
 	

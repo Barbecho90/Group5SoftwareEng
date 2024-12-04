@@ -5,10 +5,9 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 //import org.junit.jupiter.api.Test;
 
-
-import model.Card;
-import model.Card.CardRank;
-import model.Card.CardSuit;
+import sharedModel.Card;
+import sharedModel.Card.CardRank;
+import sharedModel.Card.CardSuit;
 
 public class CardTest {
 

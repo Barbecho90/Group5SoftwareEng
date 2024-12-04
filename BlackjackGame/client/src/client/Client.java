@@ -11,8 +11,6 @@ import abstractMessages.AbstractMessage;
 import message.DepositMessage;
 import message.LoginMessage;
 import message.WithdrawMessage;
-import model.Account;
-import model.Message;
 
 public class Client {
 

@@ -24,6 +24,12 @@ public class Message extends AbstractSimpleMessage{
 		case "updateTables":
 			GuiController.getInstance().updateLobbyTableListModel(getTables());
 			break;
+		case "joinTable":
+			StateManager.getInstance().setTable(getTable());
+			GuiController.getInstance().updatePlayerSeats(getTable().getPlayerList());
+			System.out.println("Current players in joinTable");
+			System.out.println(getTable().getPlayerList());
+			break;
 		default:
 			break;
 		}

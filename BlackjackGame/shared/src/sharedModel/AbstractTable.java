@@ -1,4 +1,4 @@
-package model;
+package sharedModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,14 +16,14 @@ public abstract class AbstractTable extends Observable implements Serializable{
 	protected Shoe shoe;
 	protected Dealer hostDealer;
 	private int minCardIndBeforeShuffle;
-	protected ArrayList<Player> players = new ArrayList<>();
+	protected ArrayList<Player> players;
 	
 	public AbstractTable(Dealer dealer) {
 
 		this.id = "T00" + (count++);
 		this.shoe = new Shoe();
 		this.hostDealer = dealer;
-
+		this.players  = new ArrayList<>();
 	}
 
 	public void joinTable(Player player) {

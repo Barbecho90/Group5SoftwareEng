@@ -1,6 +1,6 @@
-package clientModel;
+package model;
 
-import model.AbstractTable;
+import sharedModel.AbstractTable;
 
 public class Table extends AbstractTable{
 	private static final long serialVersionUID = 1L;

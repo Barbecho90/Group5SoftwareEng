@@ -1,4 +1,4 @@
-package model;
+package sharedModel;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -140,6 +140,7 @@ public class Dealer extends User implements Serializable {
 		// TODO Auto-generated method stub
 		try {
 			if (this.getOutputStream() != null) {
+				System.out.println("Updating dealer " + id + " with message: " + message);
 				getOutputStream().writeObject(message);
 				getOutputStream().flush();
 			}

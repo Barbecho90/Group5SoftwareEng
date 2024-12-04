@@ -7,9 +7,9 @@ import java.util.concurrent.Executors;
 import abstractMessages.AbstractMessage;
 import account.AccountManager;
 import message.LoginMessage;
-import model.Account;
 import observable.IObserver;
 import observable.Observable;
+import sharedModel.Account;
 
 import java.io.*;
 import java.net.*;

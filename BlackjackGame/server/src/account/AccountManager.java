@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import message.Message;
-import model.Account;
-import model.Dealer;
-import model.Player;
-import model.ROLE;
+import sharedModel.Account;
+import sharedModel.Dealer;
+import sharedModel.Player;
+import sharedModel.ROLE;
 import table.TableManager;
 
 public class AccountManager {

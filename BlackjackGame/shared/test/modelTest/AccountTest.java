@@ -3,10 +3,10 @@ package modelTest;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import model.Account;
-import model.Dealer;
-import model.Player;
-import model.ROLE;
+import sharedModel.Account;
+import sharedModel.Dealer;
+import sharedModel.Player;
+import sharedModel.ROLE;
 
 import static org.junit.Assert.fail;
 

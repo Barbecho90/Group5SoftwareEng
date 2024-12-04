@@ -1,8 +1,8 @@
 package Driver;
 
-import model.Account;
-import model.Player;
-import model.ROLE;
+import sharedModel.Account;
+import sharedModel.Player;
+import sharedModel.ROLE;
 
 public class Driver {
 	public static void main(String[] args) {

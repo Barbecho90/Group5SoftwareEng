@@ -2,7 +2,7 @@ package message;
 
 import abstractMessages.AbstractSimpleMessage;
 import account.AccountManager;
-import model.Player;
+import sharedModel.Player;
 import table.TableManager;
 
 public class Message extends AbstractSimpleMessage {

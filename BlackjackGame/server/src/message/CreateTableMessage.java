@@ -2,7 +2,7 @@ package message;
 
 import abstractMessages.AbstractCreateTableMessage;
 import account.AccountManager;
-import model.Dealer;
+import sharedModel.Dealer;
 import table.TableManager;
 
 public class CreateTableMessage extends AbstractCreateTableMessage{
