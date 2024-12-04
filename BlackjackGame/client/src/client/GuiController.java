@@ -72,15 +72,14 @@ public class GuiController {
 			JPanel userSeat = new JPanel();
 			userSeat.setLayout(new GridLayout(3, 1, 10, 10));
 			
-			if (StateManager.getInstance().getTable() != null
-					&& i < StateManager.getInstance().getTable().getNumPlayers()) {
+			if (i < toAdd.size()) {
 				
 				JLabel userName= new JLabel("Name: " +
-						StateManager.getInstance().getTable().getPlayerList().get(i).getAccount().getUsername(), JLabel.CENTER);
+						toAdd.get(i).getAccount().getUsername(), JLabel.CENTER);
 				JLabel userHand = new JLabel("Hand: " + 
-						Integer.toString(StateManager.getInstance().getTable().getPlayerList().get(i).getHand().getHandValue()), JLabel.CENTER);
+						Integer.toString(toAdd.get(i).getHand().getHandValue()), JLabel.CENTER);
 				JLabel userCurrentBet = new JLabel("Bet: " + 
-						Integer.toString((int)StateManager.getInstance().getTable().getPlayerList().get(i).getCurrentBet()), JLabel.CENTER);
+						Integer.toString((int)toAdd.get(i).getCurrentBet()), JLabel.CENTER);
 				userSeat.add(userName);		
 				userSeat.add(userHand);		
 				userSeat.add(userCurrentBet);		

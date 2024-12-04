@@ -544,15 +544,28 @@ public class ClientGui extends JFrame {
 		JPanel userSeatPanel = new JPanel();
 		userSeatPanel.setLayout(new GridLayout(1, 6, 10, 10)); // Six user seats horizontally
 		for (int i = 0; i < 6; i++) {
+			JPanel userSeat = new JPanel();
+			userSeat.setLayout(new GridLayout(3, 1, 10, 10));
+			
 			if (StateManager.getInstance().getTable() != null
 					&& i < StateManager.getInstance().getTable().getNumPlayers()) {
-				JLabel userLabel = new JLabel(
-						StateManager.getInstance().getTable().getPlayerList().get(i).getAccount().getUsername(),
-						JLabel.CENTER);
-				userSeatPanel.add(userLabel);
+				
+				JLabel userName= new JLabel("Name: " +
+						StateManager.getInstance().getTable().getPlayerList().get(i).getAccount().getUsername(), JLabel.CENTER);
+				JLabel userHand = new JLabel("Hand: " + 
+						Integer.toString(StateManager.getInstance().getTable().getPlayerList().get(i).getHand().getHandValue()), JLabel.CENTER);
+				JLabel userCurrentBet = new JLabel("Bet: " + 
+						Integer.toString((int)StateManager.getInstance().getTable().getPlayerList().get(i).getCurrentBet()), JLabel.CENTER);
+				userSeat.add(userName);		
+				userSeat.add(userHand);		
+				userSeat.add(userCurrentBet);		
+				
+				userSeatPanel.add(userSeat);
 			} else {
-				JLabel userLabel = new JLabel("<Cars>", JLabel.CENTER);
-				userSeatPanel.add(userLabel);
+				
+				JLabel userName = new JLabel("<EMPTY>", JLabel.CENTER);
+				userSeat.add(userName);
+				userSeatPanel.add(userSeat);
 			}
 		}
 
