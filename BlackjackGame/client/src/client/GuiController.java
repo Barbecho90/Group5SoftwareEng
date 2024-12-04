@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import model.LobbyTable;
 import state.StateManager;
 
+/**
+ * Used to dynamically update the gui when we get data from the server
+ */
 public class GuiController {
 	private static GuiController instance = null;
 	private DefaultListModel<LobbyTable> lobbyTableListModel;
