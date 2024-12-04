@@ -66,7 +66,7 @@ public class GuiController {
 	public void updatePlayerSeats(List<Player> players) {
 		userSeatPanel.removeAll();
 		
-		ArrayList<Player> toAdd = new ArrayList<Player>(players);
+		ArrayList<Player> toAdd = players != null ? new ArrayList<Player>(players) : new ArrayList<Player>();
 		System.out.println("toAdd: " + toAdd);
 		for (int i = 0; i < 6; i++) {
 			if (i < toAdd.size()) {

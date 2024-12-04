@@ -118,7 +118,8 @@ public class TableManager {
 					sendLobbyUpdates();
 					
 					Message message = new Message("joinTable");
-					message.setTable(table);
+					message.setTable(getTableById(tableId));
+					message.setPlayers(table.getPlayerList());
 					table.broadcast(message);
 					
 					return table.getId();
