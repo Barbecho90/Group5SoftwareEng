@@ -1,7 +1,7 @@
 package observable;
 
-import java.io.Serializable;
+import abstractMessages.AbstractMessage;
 
-public interface IObserver extends Serializable{
-	public void update(Observable changed);
+public interface IObserver{
+	public void update(AbstractMessage message);
 }

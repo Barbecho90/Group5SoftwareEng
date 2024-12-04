@@ -1,6 +1,10 @@
 package model;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+
+import abstractMessages.AbstractMessage;
 
 public class Dealer extends User implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -129,6 +133,20 @@ public class Dealer extends User implements Serializable {
 	public void login() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void update(AbstractMessage message) {
+		// TODO Auto-generated method stub
+		try {
+			if (this.getOutputStream() != null) {
+				getOutputStream().writeObject(message);
+				getOutputStream().flush();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

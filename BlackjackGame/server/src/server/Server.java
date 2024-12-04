@@ -8,22 +8,27 @@ import abstractMessages.AbstractMessage;
 import account.AccountManager;
 import message.LoginMessage;
 import model.Account;
+import observable.IObserver;
+import observable.Observable;
 
 import java.io.*;
 import java.net.*;
 import java.util.Enumeration;
 
-public class Server {
-
+public class Server extends Observable {
+	private static final long serialVersionUID = 1L;
+	
 	private static final int PORT = 12345;
 	private static volatile boolean isRunning = true; // its use for close server
 	private static ExecutorService pool = Executors.newCachedThreadPool();
+	private static Observable observable;
 
 	public static void main(String[] args) {
 		AccountManager.getInstance().loadAccounts();
 		String ipAddress = getLocalIPAddress();
 		System.out.println("Server Info: Port: " + PORT + "  IP: " + ipAddress);
-
+		observable = new Server();
+		
 		// create serverSocket
 		try (ServerSocket serverSocket = new ServerSocket(PORT)) {
 			System.out.println("Server started. Waiting for connections...");
@@ -34,7 +39,8 @@ public class Server {
 				System.out.println("Client connected." + clientSocket.getInetAddress());
 
 				// handle client connection in a new thread
-				pool.execute(new ClientHandler(clientSocket));
+				ClientHandler clientHandler = new ClientHandler(clientSocket);
+				pool.execute(clientHandler);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,8 +50,9 @@ public class Server {
 		}
 	}
 
-	static class ClientHandler implements Runnable {
+	static class ClientHandler implements Runnable, IObserver {
 		private final Socket clientSocket;
+		ObjectOutputStream outputStream;
 
 		public ClientHandler(Socket socket) {
 			this.clientSocket = socket;
@@ -55,7 +62,7 @@ public class Server {
 		public void run() {
 			try {
 				ObjectInputStream inputStream = new ObjectInputStream(clientSocket.getInputStream());
-				ObjectOutputStream outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+				outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 
 				boolean isLoggedIn = false;
 
@@ -69,8 +76,8 @@ public class Server {
 						// If login successful save socket to user
 						if (account != null) {
 							AccountManager.getInstance().getAccount(message.getUsername()).getUser()
-									.setSocket(clientSocket);
-							System.out.println("Client Socket attached to User");
+									.setOutputStream(outputStream);
+							System.out.println("OutputStream attached to User");
 						}
 
 						outputStream.writeObject(account);
@@ -90,9 +97,30 @@ public class Server {
 				System.out.println("catch");
 				System.out.println(e);
 			}
+				
+		}
 
+		@Override
+		public void update(AbstractMessage message) {
+			sendMessage(message);			
+		}
+		
+		public void sendMessage(AbstractMessage message) {
+			try {
+				if(outputStream != null) {
+					outputStream.writeObject(message);
+					outputStream.flush();
+				}
+			} catch(IOException e) {
+				System.err.println("Failed to send message to client: " + e.getMessage());
+			}
 		}
 	}
+	
+	
+	
+	 
+	
 
 	private static String getLocalIPAddress() {
 		try {
