@@ -32,7 +32,7 @@ public class Dealer extends User implements Serializable {
 	
 	public void createTable(int minBet) {
 		//add table to the lobby
-		this.lobby.getTableList().add(this.table);
+		//this.lobby.getTableList().add(this.table);
 		this.lobby.newTable(); //increase table count
 		//set the minBet
 		this.table.setMinBet(minBet);

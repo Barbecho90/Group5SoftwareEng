@@ -12,9 +12,9 @@ import sharedModel.Lobby;
 
 public class DealerTest {
 	
-	Lobby lobby;
-	Dealer dealer;
-	AbstractTable table;
+	public Lobby lobby;
+	private Dealer dealer;
+	private AbstractTable table;
 	
 	@Before
 	public void setup() {

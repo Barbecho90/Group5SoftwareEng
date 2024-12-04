@@ -7,43 +7,43 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import sharedModel.AbstractTable;
+import sharedModel.Dealer;
 import sharedModel.Lobby;
 
 public class LobbyTest {
 	
-	Lobby lobby = new Lobby();
-	
-	
+		
 	//test to see if lobby initialize correctly
 	@Test
 	public void TestLobbyConstructor() {
-		assertEquals(0, lobby.getNumTables());
-		assertEquals(0, lobby.getAvailableDealers());
+		assertEquals(0, Lobby.getInstance().getTableList());
+		assertEquals(0, Lobby.getInstance().getAvailableDealers());
 	}
 	
 	//test to see if table list is empty on initialization
 	@Test
 	public void TestTableList() {
 		
-		ArrayList<AbstractTable> tables = lobby.getTableList();
-		int tableSize = tables.size();
-		
-		assertEquals(0, tableSize);
+				
+		assertEquals(0, Lobby.getInstance().getTableList().size());
 	}
 	
 	//test to see if adding new tables updates correctly
 	@Test
 	public void TestNewTableAdded() {
-		lobby.newTable();
 		
-		assertEquals(1, lobby.getNumTables());
+		
+		
+		
+		assertEquals(1, Lobby.getInstance().getNumTables());
 	}
 	
 	//test to see if adding new tables updates correctly
 		@Test
 		public void TestNewDealerAdded() {
-			lobby.newDealer();
+			Dealer dealer = new Dealer();
+			Lobby.getInstance().newDealer(); //one instance of Lobby
 			
-			assertEquals(1, lobby.getAvailableDealers());
+			assertEquals(1, Lobby.getInstance().getAvailableDealers());
 		}
 }

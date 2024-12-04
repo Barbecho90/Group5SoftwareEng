@@ -18,7 +18,9 @@ public class TableTest {
     private Player mockPlayer;
     private Player mockPlayer2;
     private class ConcreteTable extends AbstractTable {
-        public ConcreteTable(Dealer dealer) {
+        private static final long serialVersionUID = 1L;
+
+		public ConcreteTable(Dealer dealer) {
             super(dealer);
         }
     }
@@ -30,7 +32,7 @@ public class TableTest {
        System.out.println(table);
        mockPlayer = new Player();
       // mockPlayer2 = new Player();
-       System.out.println(table);
+       System.out.println(table + "Table Constructor");
 
          }
     //test constructor, getID(), getNumPlayers(), getMinBet()
