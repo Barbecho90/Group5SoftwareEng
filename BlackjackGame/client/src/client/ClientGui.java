@@ -241,11 +241,11 @@ public class ClientGui extends JFrame {
 		});
 
 		// add action listeners
-		button1.addActionListener(e -> openDepositFrame());
-		button2.addActionListener(e -> openWithdrawFrame());
-		button3.addActionListener(e -> joinTable());
-		button4.addActionListener(e -> disconnect());
-
+		button1.addActionListener(e -> {openDepositFrame(); frame.dispose();});
+		button2.addActionListener(e ->  {openWithdrawFrame(); frame.dispose();});
+		button3.addActionListener(e -> {joinTable(); frame.dispose();});
+		button4.addActionListener(e -> {disconnect(); frame.dispose();});
+		
 		Message message = new Message("joinLobby");
 		message.setUsername(StateManager.getInstance().getAccount().getUsername());
 		SendMessage.getInstance().send(message);
@@ -329,10 +329,10 @@ public class ClientGui extends JFrame {
 			}
 		});
 
-		button1.addActionListener(e -> joinTable());
-		button2.addActionListener(e -> createTable());
-		button3.addActionListener(e -> disconnect());
-
+		button1.addActionListener(e -> {joinTable(); frame.dispose();});
+		button2.addActionListener(e -> {createTable(); frame.dispose();});
+		button3.addActionListener(e -> {disconnect(); frame.dispose();});
+			
 		frame.setVisible(true);
 	}
 
@@ -550,7 +550,7 @@ public class ClientGui extends JFrame {
 						JLabel.CENTER);
 				userSeatPanel.add(userLabel);
 			} else {
-				JLabel userLabel = new JLabel("<EMPTY>", JLabel.CENTER);
+				JLabel userLabel = new JLabel("<Cars>", JLabel.CENTER);
 				userSeatPanel.add(userLabel);
 			}
 		}
@@ -568,7 +568,7 @@ public class ClientGui extends JFrame {
 															// deal card to them
 		button3.addActionListener(e -> dealerCreateShoe(button2, button3));
 		// button5.addActionListener(e -> collectMoney());
-		button4.addActionListener(e -> closeTable());
+		button4.addActionListener(e -> {closeTable(); openGameFrame.dispose();});
 
 		// user
 		JButton butt1 = new JButton("Call to Hit");
@@ -581,7 +581,7 @@ public class ClientGui extends JFrame {
 		butt2.addActionListener(e -> playerStand());
 		butt3.addActionListener(e -> playerDoubleDown());
 		butt4.addActionListener(e -> playerSplit());
-		butt5.addActionListener(e -> playerLeaveTable());
+		butt5.addActionListener(e -> {playerLeaveTable(); openGameFrame.dispose();});
 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new GridLayout(6, 1, 10, 10)); // Six buttons with spacing
